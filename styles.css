@@ -1,0 +1,12 @@
+/* @import url(https://fonts.googleapis.com/css?family=Inconsolata); */
+/* @import url(https://fonts.googleapis.com/css?family=Lora:400,700|)*/
+@import url(https://fonts.googleapis.com/css?family=Lato:400,700,900); 
+/* @import url(https://fonts.googleapis.com/css?family=Overlock+SC); */
+
+h1, h2, h3, h4, h5, h6 {
+  font-family: "Lato", Helvetica, Arial, sans-serif;
+}
+
+body {
+  font-family:"Lato", "Helvetica Neue", Helvetica, Arial, sans-serif;
+}

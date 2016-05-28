@@ -1,14 +1,14 @@
 library(data.table)
 
-source('../aux/defs.R')
-source('../aux/funciones.R')
+source('../misc/defs.R')
+source('../misc/funciones.R')
 
 semestres <- c("Septiembre-Enero", "Febrero-Junio")
 
 ## Lee y escribe horarios en CSV
 leeHorario <- function(grupo, semestre)
 {
-    hh <- fread(paste0('../data/horarios/',
+    hh <- fread(paste0('csv/',
                        grupo, '_', semestre,
                        '.csv'),
                 stringsAsFactors = TRUE)
@@ -20,7 +20,7 @@ leeHorario <- function(grupo, semestre)
 
 escribeHorario <- function(df, grupo, semestre)
 {
-    path <- '../data/horarios/'
+    path <- 'csv/'
     file <- paste0(grupo, '_', semestre,
                    '.csv')
     write.csv2(df, file = paste0(path, file), row.names = FALSE)
@@ -76,7 +76,7 @@ shorten <- function(x, width)
 }
 
 ## Genera un timetable en PDF a partir de un CSV
-template <- readLines("../aux/timetable.tex")
+template <- readLines("timetable.tex")
 ## hh es un data.table con el contenido de un horario de grupo,
 ## normalmente a través de leeHorario
 csv2tt <- function(hh, grupo, semestre, itinerario = "",
@@ -137,7 +137,7 @@ csv2tt <- function(hh, grupo, semestre, itinerario = "",
                 "\\end{center}",
                 "\\end{document}")
     ## Logos
-    file.copy(paste0('../aux/',
+    file.copy(paste0('../misc/',
                     c('LogoETSIDI.pdf', 'LogoUPM.pdf')),
               dest)
     old <- setwd(dest)

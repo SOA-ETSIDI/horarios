@@ -72,7 +72,7 @@ shinyServer(function(input,output,session){
         refresh <- input$refresh
         semestre <- which(semestres == input$semestre)
         tags$iframe(style="height:600px; width:100%",
-                    src=paste0("pdfs/", input$grupo,
+                    src=paste0("pdf/", input$grupo,
                                "_", semestre,
                                ".pdf#zoom=page-width"))
     })
@@ -85,7 +85,7 @@ shinyServer(function(input,output,session){
         grupo <- input$grupo
         ## Genero timetable en carpeta de pdfs
         csv2tt(df, grupo, semestre,
-               dest = '../data/horarios/pdfs/')
+               dest = 'pdf/')
         ## }
     })
     ## Grabo datos en csv
