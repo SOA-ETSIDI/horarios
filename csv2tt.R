@@ -1,9 +1,5 @@
 library(data.table)
 
-source('../misc/defs.R')
-source('../misc/funciones.R')
-
-semestres <- c("Septiembre-Enero", "Febrero-Junio")
 
 ## Lee y escribe horarios en CSV
 leeHorario <- function(grupo, semestre)
@@ -12,6 +8,8 @@ leeHorario <- function(grupo, semestre)
                        grupo, '_', semestre,
                        '.csv'),
                 stringsAsFactors = TRUE)
+    ## Algunos ficheros pueden tener filas mal formadas: las elimino
+    hh <- hh[!is.na(Dia)]
     hh[, Dia := factor(Dia, levels = dias, ordered = TRUE)]
     hh[, Aula := as.character(Aula)]
     setkey(hh, Dia, HoraInicio)
@@ -43,6 +41,8 @@ horas <- hhSeq(h1 = "08:15", h2 = "21:15", by = "30 min")
 join <- function(x, collapse = ' \\\\ ')
 {
     x <- unique(x)
+    ## Descarto elementos vacíos
+    x <- x[x != ""]
     N <- length(x)
     if (N > 1) x <- shorten(x, 20)
     paste(x, collapse = collapse)
@@ -57,11 +57,19 @@ shorten <- function(x, width)
                   "Técnicas", "Operaciones",
                   "Aplicaciones", "Aplicados", "Aplicadas", "Aplicado", "Aplicada",
                   "Propiedades", "Conocimiento",
+                  "Transformación",
+                  "Sistemas",
+                  "Eléctricos", "Electrónicos",
+                  "Informáticos",
                   "Industriales", "Industrial")
         longTo <- c("Ing.", "Ing.",
                     "Téc.", "Op.",
                     "Apl.", "Apl.", "Apl.", "Apl.", "Apl.",
                     "Prop.", "Con.",
+                    "Trans.",
+                    "Sis.",
+                    "Elec.", "Elec.",
+                    "Inf.",
                     "Ind.", "Ind.")
         short <- c(" de ", " y ", " en ", " a ", " o ",
                    " los ", " las ", " el ", " la ")
@@ -79,13 +87,14 @@ shorten <- function(x, width)
 template <- readLines("timetable.tex")
 ## hh es un data.table con el contenido de un horario de grupo,
 ## normalmente a través de leeHorario
-csv2tt <- function(hh, grupo, semestre, itinerario = "",
+csv2tt <- function(hh, nombre, semestre, itinerario = "",
+                   colorByTipo = TRUE,
                    dest = tempdir(),
                    preamble = template,
                    semString = semestres)
 {
     hh <- as.data.table(hh)
-    
+    grupo <- as.character(hh$Grupo[1])
     ## Si dos asignaturas coinciden en horario,
     ## las concatena en un único string
     ## Idem para el tipo, y además abreviamos su descripción
@@ -93,24 +102,47 @@ csv2tt <- function(hh, grupo, semestre, itinerario = "",
              .(
                  Asignatura = join(Asignatura, collapse = " / "),
                  Tipo = join(abTipo(Tipo), collapse = "|"),
+                 Aula = join(Aula, collapse = "|"),
                  HoraFinal,
                  dh = diffHour(HoraInicio, HoraFinal)),
              by = .(Dia, HoraInicio)]
     ## Recorto el nombre de la asignatura según el espacio disponible
-    hh[, width := findInterval(dh, seq(1, 4, .5), right = TRUE) * 20]
+    hh[,
+       width := findInterval(dh,
+                             seq(1, 8, .5),
+                             right = TRUE) * 21
+       ]
     ## Según el tipo uso un formato u otro (definidos en timetable.tex)
-    hh[, formato := Tipo]
-    hh[!(formato %in% sTipos),
-       formato := "misc"]
-    
+    if (isTRUE(colorByTipo))
+    {
+        hh[, formato := Tipo]
+        hh[!(formato %in% sTipos),
+           formato := "misc"]
+    } else
+    {## color definido por asignatura
+        hh <- hh[, .(Tipo,
+                     Dia,
+                     HoraInicio, HoraFinal,
+                     Aula,
+                     width,
+                     formato = LETTERS[.GRP]),
+             by = Asignatura]
+    }
     ## Cabecera del documento, después del preambulo
     header <- c("\\begin{document}",
                 "\\begin{center}",
                 paste0("\\section*{",
-                       paste(grupo, itinerario),
+                       paste(nombre, itinerario),
                        " (", semString[semestre],
                        ")", "}"),
                 "\\begin{timetable}{8}{21}")
+    ## Hora tuthora y comidas: en los másteres no hay.
+    if (grupo %in% c('56AA', '56AB', '56AC'))
+    {
+        tuthTex <- ""
+        comida <- ""
+    } else
+    {
     ## Hora tuthora, dependiendo de grupo de mañana o tarde
     tuthora <- ifelse(MoT(grupo) == "M",
                       "{11.15}{11.45}",
@@ -123,6 +155,8 @@ csv2tt <- function(hh, grupo, semestre, itinerario = "",
     comida <- paste0("\\shortcalentry[free]{", 1:5,
                       "}", "{13.45}{15.15}",
                      "{Comida}{}")
+        
+    }
     ## Franjas horarias de docencia
     htex <- hh[, paste0("\\calentry",
                         "[", formato, "]",
@@ -130,7 +164,8 @@ csv2tt <- function(hh, grupo, semestre, itinerario = "",
                         "{", formatHora2(HoraInicio), "}",
                         "{", formatHora2(HoraFinal), "}",
                         "{", shorten(Asignatura, width), "}",
-                        "{", Tipo, "}")
+                        "{", Tipo, "}",
+                        "{", Aula, "}")
                ]
     
     ending <- c("\\end{timetable}",
@@ -147,6 +182,7 @@ csv2tt <- function(hh, grupo, semestre, itinerario = "",
     system2('pdflatex', texFile)
     files2clean <- list.files('.', "(tex|log|aux)")
     file.remove(files2clean)
+    file.remove(c('LogoETSIDI.pdf', 'LogoUPM.pdf'))
     setwd(old)
 }
 

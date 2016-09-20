@@ -1,18 +1,20 @@
-"Asignatura";"Titulacion";"Dia";"HoraInicio";"Duracion";"Aula";"Codigo";"tipo";"HoraFinal";"Grupo";"Semestre"
-"Análisis y Simulación Térmica";"56AA";"Martes";"16:00";"2,5";NA;563000022;"Teoría y Problemas";"18:30";"56AA";2
-"Aplicaciones Industriales de los Láseres";"56AA";"Martes";"18:00";"2";NA;563000009;"Teoría y Problemas";"20:00";"56AA";2
-"Caracterización y Ensayo de Equipos y Materiales Eléctricos";"56AA";"Lunes";"18:30";"2,5";NA;563000027;"Teoría y Problemas";"21:00";"56AA";2
-"Certificación y Calificación de Productos";"56AA";"Miércoles";"16:00";"1,5";NA;563000010;"Teoría y Problemas";"17:30";"56AA";2
-"Dinámica de Sistemas y su Aplicación a la Ingeniería";"56AA";"Martes";"18:30";"2,5";NA;563000026;"Teoría y Problemas";"21:00";"56AA";2
-"Diseño del Montaje en Fabricación Industrial";"56AA";"Jueves";"16:00";"5";NA;563000025;"Teoría y Problemas";"21:00";"56AA";2
-"Diseño y Cálculo de Uniones Estructurales";"56AA";"Jueves";"16:30";"1,5";NA;563000013;"Teoría y Problemas";"18:00";"56AA";2
-"Materiales Avanzados: Síntesis y Caracterización";"56AA";"Miércoles";"16:00";"2,5";NA;563000021;"Teoría y Problemas";"18:30";"56AA";2
-"Metrología Dimensional";"56AA";"Lunes";"16:00";"2,5";NA;563000023;"Teoría y Problemas";"18:30";"56AA";2
-"Metrología Industrial";"56AA";"Miércoles";"17:30";"1,5";NA;563000011;"Teoría y Problemas";"19:00";"56AA";2
-"Procesado de Señales e Imágenes";"56AA";"Miércoles";"18:30";"2,5";NA;563000024;"Teoría y Problemas";"21:00";"56AA";2
-"Seguridad y Ergonomía";"56AA";"Lunes";"19:00";"2";NA;563000012;"Teoría y Problemas";"21:00";"56AA";2
-"Selección y Diseño de Materiales";"56AA";"Jueves";"18:00";"1,5";NA;563000015;"Teoría y Problemas";"19:30";"56AA";2
-"Tecnologías Aplicadas al Mantenimiento Industrial";"56AA";"Lunes";"16:00";"1,5";NA;563000014;"Teoría y Problemas";"17:30";"56AA";2
-"Tecnologías Aplicadas al Mantenimiento Industrial";"56AA";"Martes";"16:00";"2";NA;563000014;"Teoría y Problemas";"18:00";"56AA";2
-"Visión Artificial";"56AA";"Lunes";"16:00";"2";NA;563000008;"Teoría y Problemas";"18:00";"56AA";2
-"Visión Artificial";"56AA";"Martes";"16:00";"2";NA;563000008;"Teoría y Problemas";"18:00";"56AA";2
+"Dia";"Asignatura";"Tipo";"HoraInicio";"HoraFinal";"Aula";"Itinerario";"Grupo";"Semestre";"Titulacion"
+"Lunes";"Visión Artificial";"Teoría y Problemas";"16:00";"18:00";"";"Profesional";"56AA";2;"56AA"
+"Lunes";"Seguridad y Ergonomía";"Teoría y Problemas";"19:00";"21:00";"";"Profesional";"56AA";2;"56AA"
+"Lunes";"Caracterización y Ensayo de Equipos y Materiales Eléctricos";"Teoría y Problemas";"18:30";"21:00";"";"Investigador";"56AA";2;"56AA"
+"Lunes";"Metrología Dimensional";"Teoría y Problemas";"16:00";"18:30";"";"Investigador";"56AA";2;"56AA"
+"Lunes";"Tecnologías Aplicadas al Mantenimiento Industrial";"Teoría y Problemas";"16:00";"18:00";"";"Profesional";"56AA";2;"56AA"
+"Martes";"Visión Artificial";"Teoría y Problemas";"16:00";"18:00";"";"Profesional";"56AA";2;"56AA"
+"Martes";"Tecnologías Aplicadas al Mantenimiento Industrial";"Teoría y Problemas";"16:00";"18:00";"";"Profesional";"56AA";2;"56AA"
+"Martes";"Análisis y Simulación Térmica";"Teoría y Problemas";"16:00";"18:30";"";"Investigador";"56AA";2;"56AA"
+"Martes";"Aplicaciones Industriales de los Láseres";"Teoría y Problemas";"18:00";"20:00";"";"Profesional";"56AA";2;"56AA"
+"Martes";"Dinámica de Sistemas y su Aplicación a la Ingeniería";"Teoría y Problemas";"18:30";"21:00";"";"Investigador";"56AA";2;"56AA"
+"Miércoles";"Materiales Avanzados: Síntesis y Caracterización";"Teoría y Problemas";"16:00";"18:30";"";"Investigador";"56AA";2;"56AA"
+"Miércoles";"Metrología Industrial";"Teoría y Problemas";"17:30";"19:00";"";"Profesional";"56AA";2;"56AA"
+"Miércoles";"Procesado de Señales e Imágenes";"Teoría y Problemas";"18:30";"21:00";"";"Investigador";"56AA";2;"56AA"
+"Miércoles";"Certificación y Calificación de Productos";"Teoría y Problemas";"16:00";"17:30";"";"Profesional";"56AA";2;"56AA"
+"Jueves";"Selección y Diseño de Materiales";"Teoría y Problemas";"18:00";"19:30";"";"Profesional";"56AA";2;"56AA"
+"Jueves";"Diseño del Montaje en Fabricación Industrial";"Teoría y Problemas";"16:00";"21:00";"";"Investigador";"56AA";2;"56AA"
+"Jueves";"Diseño y Cálculo de Uniones Estructurales";"Teoría y Problemas";"16:30";"18:00";"";"Profesional";"56AA";2;"56AA"
+
+

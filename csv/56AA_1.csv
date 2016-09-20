@@ -1,12 +1,14 @@
-"Asignatura";"Titulacion";"Dia";"HoraInicio";"Duracion";"Aula";"Codigo";"tipo";"HoraFinal";"Grupo";"Semestre"
-"Análisis de Productos por Elementos Finitos";"56AA";"Jueves";"17:30";"2";NA;563000006;"Teoría y Problemas";"19:30";"56AA";1
-"Automatización y Robótica";"56AA";"Jueves";"15:30";"2";NA;563000004;"Teoría y Problemas";"17:30";"56AA";1
-"Diseño y Desarrollo de Productos";"56AA";"Lunes";"16:00";"5";NA;563000001;"Teoría y Problemas";"21:00";"56AA";1
-"Diseño y Fabricación Asistidos por Ordenador (CAD-CAM)";"56AA";"Lunes";"16:00";"5";NA;563000005;"Teoría y Problemas";"21:00";"56AA";1
-"Estadística Aplicada a la Investigación";"56AA";"Viernes";"16:00";"2";NA;563000018;"Teoría y Problemas";"18:00";"56AA";1
-"Información Científica-Técnica";"56AA";"Miércoles";"18:30";"2";NA;563000020;"Teoría y Problemas";"20:30";"56AA";1
-"Ingeniería de la Calidad Total";"56AA";"Martes";"16:00";"3";NA;563000003;"Teoría y Problemas";"19:00";"56AA";1
-"Ingeniería de Procesos Productivos";"56AA";"Miércoles";"16:00";"3";NA;563000002;"Teoría y Problemas";"19:00";"56AA";1
-"Métodos Numéricos Avanzados y Ecuaciones Diferenciales";"56AA";"Viernes";"18:00";"2";NA;563000019;"Teoría y Problemas";"20:00";"56AA";1
-"Modelado y Simulación";"56AA";"Martes";"18:30";"2";NA;563000017;"Teoría y Problemas";"20:30";"56AA";1
-"Producción Limpia, Ecología Industrial y Desarrollo Sostenible";"56AA";"Miércoles";"18:30";"2";NA;563000007;"Teoría y Problemas";"20:30";"56AA";1
+"Dia";"Asignatura";"Tipo";"HoraInicio";"HoraFinal";"Aula";"Itinerario";"Grupo";"Semestre";"Titulacion"
+"Lunes";"Diseño y Desarrollo de Productos";"Teoría y Problemas";"16:00";"20:30";"";"";"56AA";1;"56AA"
+"Lunes";"Diseño y Fabricación Asistidos por Ordenador (CAD-CAM)";"Teoría y Problemas";"16:00";"20:30";"";"Profesional";"56AA";1;"56AA"
+"Martes";"Ingeniería de la Calidad Total";"Teoría y Problemas";"16:00";"18:30";"";"";"56AA";1;"56AA"
+"Jueves";"Modelado y Simulación";"Teoría y Problemas";"16:00";"18:00";"";"Investigador";"56AA";1;"56AA"
+"Miércoles";"Información Científica-Técnica";"Teoría y Problemas";"18:30";"20:00";"";"Investigador";"56AA";1;"56AA"
+"Miércoles";"Ingeniería de Procesos Productivos";"Teoría y Problemas";"16:00";"18:30";"";"";"56AA";1;"56AA"
+"Miércoles";"Producción Limpia, Ecología Industrial y Desarrollo Sostenible";"Teoría y Problemas";"18:30";"20:00";"";"Profesional";"56AA";1;"56AA"
+"Jueves";"Automatización y Robótica";"Teoría y Problemas";"15:30";"17:30";"";"Profesional";"56AA";1;"56AA"
+"Jueves";"Análisis de Productos por Elementos Finitos";"Teoría y Problemas";"17:30";"19:30";"ADI";"Profesional";"56AA";1;"56AA"
+"Martes";"Estadística Aplicada a la Investigación";"Teoría y Problemas";"18:30";"20:30";"";"Investigador";"56AA";1;"56AA"
+"Jueves";"Métodos Numéricos Avanzados y Ecuaciones Diferenciales";"Teoría y Problemas";"18:00";"20:00";"";"Investigador";"56AA";1;"56AA"
+
+

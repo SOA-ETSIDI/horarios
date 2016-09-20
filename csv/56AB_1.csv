@@ -1,12 +1,13 @@
-"Asignatura";"Titulacion";"Dia";"HoraInicio";"Duracion";"Aula";"Codigo";"tipo";"HoraFinal";"Grupo";"Semestre"
-"Automatización";"56AB";"Miércoles";"16:00";"3";NA;563000033;"Teoría y Problemas";"19:00";"56AB";1
-"Conocimiento Avanzados de Materiales y Aplicaciones";"56AB";"Martes";"16:00";"2";NA;563000031;"Teoría y Problemas";"18:00";"56AB";1
-"Conocimiento Avanzados de Materiales y Aplicaciones";"56AB";"Lunes";"16:00";"2";NA;563000031;"Teoría y Problemas";"18:00";"56AB";1
-"Diseño Electromecánico de líneas I";"56AB";"Martes";"19:00";"2";NA;563000047;"Teoría y Problemas";"21:00";"56AB";1
-"Instrumentación y Control";"56AB";"Viernes";"17:30";"3";NA;563000030;"Teoría y Problemas";"20:30";"56AB";1
-"Mecánica de los Materiales";"56AB";"Jueves";"17:00";"2";NA;563000032;"Teoría y Problemas";"19:00";"56AB";1
-"Seguridad en Trabajos en Instalaciones Electromecánicas";"56AB";"Viernes";"16:30";"1";NA;563000035;"Teoría y Problemas";"17:30";"56AB";1
-"Seguridad en Trabajos en Instalaciones Electromecánicas";"56AB";"Jueves";"19:00";"2";NA;563000035;"Teoría y Problemas";"21:00";"56AB";1
-"Sensores y Adquisición de Datos";"56AB";"Miércoles";"19:00";"2";NA;563000036;"Teoría y Problemas";"21:00";"56AB";1
-"Simulación de Sistemas Mecánicos y Eléctricos";"56AB";"Lunes";"17:30";"3";NA;563000034;"Teoría y Problemas";"20:30";"56AB";1
-"Simulación de Sistemas Mecánicos y Eléctricos";"56AB";"Martes";"17:30";"2";NA;563000034;"Teoría y Problemas";"19:30";"56AB";1
+"Dia";"Asignatura";"Tipo";"HoraInicio";"HoraFinal";"Aula";"Itinerario";"Grupo";"Semestre";"Titulacion"
+"Lunes";"Conocimiento Avanzados de Materiales y Aplicaciones";"Teoría y Problemas";"16:00";"17:30";"";"";"56AB";1;"56AB"
+"Lunes";"Simulación de Sistemas Mecánicos y Eléctricos";"Teoría y Problemas";"17:30";"20:30";"";"";"56AB";1;"56AB"
+"Martes";"Simulación de Sistemas Mecánicos y Eléctricos";"Teoría y Problemas";"17:30";"19:00";"";"";"56AB";1;"56AB"
+"Martes";"Conocimiento Avanzados de Materiales y Aplicaciones";"Teoría y Problemas";"16:00";"17:30";"";"";"56AB";1;"56AB"
+"Martes";"Diseño Electromecánico de líneas I";"Teoría y Problemas";"19:00";"21:00";"";"Distribución";"56AB";1;"56AB"
+"Miércoles";"Automatización";"Teoría y Problemas";"16:00";"19:00";"";"";"56AB";1;"56AB"
+"Miércoles";"Sensores y Adquisición de Datos";"Teoría y Problemas";"19:00";"21:00";"";"Mecatrónica";"56AB";1;"56AB"
+"Jueves";"Mecánica de los Materiales";"Teoría y Problemas";"17:00";"19:00";"";"";"56AB";1;"56AB"
+"Jueves";"Seguridad en Trabajos en Instalaciones Electromecánicas";"Teoría y Problemas";"19:00";"21:00";"";"";"56AB";1;"56AB"
+"Viernes";"Instrumentación y Control";"Teoría y Problemas";"17:30";"20:30";"";"";"56AB";1;"56AB"
+"Viernes";"Seguridad en Trabajos en Instalaciones Electromecánicas";"Teoría y Problemas";"16:30";"17:30";"";"";"56AB";1;"56AB"
+

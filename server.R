@@ -2,8 +2,8 @@ library(rhandsontable)
 library(shiny)
 library(shinyjs)
 
-source('csv2tt.R')
-
+source('init.R')
+
 shinyServer(function(input,output,session){
     
     values <- reactiveValues()
@@ -16,6 +16,10 @@ shinyServer(function(input,output,session){
         dt[,
            c("Grupo", "Semestre", "Titulacion") := NULL]
         values$data <- dt
+        file.copy(file.path(tipoFolder,
+                            paste0(grupo, '_', semestre, '.pdf')),
+                  tempdir(),
+                  overwrite = TRUE)
     })
     
     output$table <- renderRHandsontable({
@@ -24,16 +28,12 @@ shinyServer(function(input,output,session){
         ## tabla
         df <- values$data
         hot <- rhandsontable(df,
-                      rowHeaders = NULL)
+                             rowHeaders = NULL,
+                             stretchH = TRUE)
         ## Las columnas no se editan ni ordenar
         hot <- hot_cols(hot,
                         allowColEdit = FALSE,
                         columnSorting = FALSE)
-        hot <- hot_col(hot, col = "Aula",
-                       ## source = aulas,
-                       readOnly = TRUE)
-                       ## type = 'autocomplete',
-                       ## strict = TRUE)
         hot <- hot_col(hot, col = "Tipo",
                        source = tipos,
                        type = 'autocomplete',
@@ -54,9 +54,15 @@ shinyServer(function(input,output,session){
                        source = horas,
                        type = 'autocomplete',
                        strict = TRUE)
+        hot <- hot_col(hot, col = "Aula",
+                       source = c("", aulas, grupos),
+                       type = 'autocomplete',
+                       default = "",
+                       strict = TRUE)
         if ("Itinerario" %in% names(df))
             hot <- hot_col(hot, col = "Itinerario",
                            source = c("", "A", "B"),
+                           default = "",
                            strict = TRUE)
         hot
     })
@@ -72,9 +78,11 @@ shinyServer(function(input,output,session){
         refresh <- input$refresh
         semestre <- which(semestres == input$semestre)
         tags$iframe(style="height:600px; width:100%",
-                    src=paste0("pdf/", input$grupo,
+                    src=paste0("pdfs/",
+                               input$grupo,
                                "_", semestre,
-                               ".pdf#zoom=page-width"))
+                               ".pdf#zoom=page-width")
+                    )
     })
     ## Refresco PDF
     observeEvent(input$refresh,
@@ -83,10 +91,11 @@ shinyServer(function(input,output,session){
         df <- values$data
         semestre <- which(semestres == input$semestre)
         grupo <- input$grupo
-        ## Genero timetable en carpeta de pdfs
+        df$Grupo <- grupo
+        ## Genero timetable PDF en directorio temporal
         csv2tt(df, grupo, semestre,
-               dest = 'pdf/')
-        ## }
+               colorByTipo = TRUE,
+               dest = tempdir())
     })
     ## Grabo datos en csv
     observeEvent(input$update,
@@ -101,9 +110,36 @@ shinyServer(function(input,output,session){
         df$Grupo <- grupo
         df$Semestre <- semestre
         df$Titulacion <- titulacion
-        ## Graba la tabla y la actualiza en el servidor con git
+        ## Graba la tabla csv
         escribeHorario(df, grupo, semestre)
         info('Tabla modificada correctamente.')
+        ## Genera PDF con color por asignatura
+        csv2tt(df, grupo, semestre,
+               colorByTipo = TRUE,
+               dest = tipoFolder)
+        ## Genera PDF con color por asignatura
+        csv2tt(df, grupo, semestre,
+               colorByTipo = FALSE,
+               dest = asigFolder)
+        info('PDFs generados correctamente.')
+        ## Vuelca en webdav
+        copyWeb(grupo, semestre, tipoFolder, webTipo)
+        copyWeb(grupo, semestre, asigFolder, webAsignatura)
+        ## Actualizo el fichero completo del semestre
+        for (folder in file.path(webdav, c('tipo', 'asignatura')))
+        {
+            pdfs <- file.path(folder,
+                              paste0('S', semestre),
+                              paste0(grupos, "_", semestre, ".pdf"))
+            result <- file.path(folder,
+                                paste0("ETSIDI_2016_2017_Grado_S",
+                                       semestre, ".pdf"))
+            system2('pdftk',
+                    c(pdfs, "cat output", result)
+                    )
+        }
+        ## Mensaje para usuario si nada falla
+        info('Horarios publicados.')
     })
     
 }) 
