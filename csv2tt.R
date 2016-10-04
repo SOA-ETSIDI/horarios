@@ -176,13 +176,13 @@ csv2tt <- function(hh, nombre, semestre, itinerario = "",
                     c('LogoETSIDI.pdf', 'LogoUPM.pdf')),
               dest)
     old <- setwd(dest)
-    texFile <- paste0(grupo, itinerario, "_", semestre, ".tex")
+    on.exit(setwd(old))
+    texFile <- paste0(nombre, itinerario, "_", semestre, ".tex")
     writeLines(c(preamble, header, tuthTex, comida, htex, ending),
                con = texFile)
     system2('pdflatex', texFile)
     files2clean <- list.files('.', "(tex|log|aux)")
     file.remove(files2clean)
-    file.remove(c('LogoETSIDI.pdf', 'LogoUPM.pdf'))
-    setwd(old)
+##    file.remove(c('LogoETSIDI.pdf', 'LogoUPM.pdf'))
 }
 
