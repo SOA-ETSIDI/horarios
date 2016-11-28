@@ -2,6 +2,7 @@ library(openxlsx)
 library(data.table)
 
 source('csv2tt.R')
+source('../misc/defs.R')
 
 pdfFolder <- '../data/horarios/pdfs/'
 pdfFolder <- tempdir()

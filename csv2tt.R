@@ -1,5 +1,9 @@
 library(data.table)
 
+source('../misc/defs.R')
+source('../misc/funciones.R')
+semestres <- c("Septiembre-Enero", "Febrero-Junio")
+
 
 ## Lee y escribe horarios en CSV
 leeHorario <- function(grupo, semestre)
