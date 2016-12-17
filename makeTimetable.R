@@ -4,9 +4,9 @@ library(data.table)
 source('csv2tt.R')
 source('../misc/defs.R')
 
-pdfFolder <- '../data/horarios/pdfs/'
-pdfFolder <- tempdir()
+pdfFolder <- 'pdfs'
 
+
 makeTimetable <- function(g, s, color = 'tipo', dest)
 {
     if (color == 'tipo')
@@ -49,31 +49,45 @@ makeTimetable <- function(g, s, color = 'tipo', dest)
                 colorByTipo = colorTipo,
                 dest = myFolder)
 }
+
+myGrupos <- grupos
+mySems <- 1:2
 
-for (g in grupos)
+for (g in myGrupos)
 {
-    for (s in 1:2)
+    for (s in mySems)
     {
-        makeTimetable(g, s = 1, color = 'tipo', dest = pdfFolder)
-        makeTimetable(g, s = 1, color = 'asignatura', dest = pdfFolder)
+        makeTimetable(g, s = s, color = 'tipo', dest = pdfFolder)
+        makeTimetable(g, s = s, color = 'asignatura', dest = pdfFolder)
     }
 }
 
 ## Uno todos los PDFs en uno por semestre
 pdfS1 <- paste0(grupos, "_1.pdf")
-pdfS2 <- paste0(grupos, "_2.pdf")
-
-for (folder in file.path(pdfFolder, c('tipo', 'asignatura')))
+for (folder in file.path(pdfFolder, c('tipo', 'asignatura'), 'S1'))
 {
     old <- setwd(folder)
     system2('pdftk', c(pdfS1,
                        "cat",
                        "output ETSIDI_2016_2017_Grado_S1.pdf"))
+    system2('mv', 'ETSIDI_2016_2017_Grado_S1.pdf ../')
+    system2('rm', 'Logo*.pdf')
+    setwd(old)
+}
+
+pdfS2 <- paste0(grupos, "_2.pdf")
+for (folder in file.path(pdfFolder, c('tipo', 'asignatura'), 'S2'))
+{
+    old <- setwd(folder)
     system2('pdftk', c(pdfS2,
                        "cat",
                        "output ETSIDI_2016_2017_Grado_S2.pdf"))
+    system2('mv', 'ETSIDI_2016_2017_Grado_S2.pdf ../')
+    system2('rm', 'Logo*.pdf')
     setwd(old)
 }
+
+
 
 ## Genero libro excel
 
