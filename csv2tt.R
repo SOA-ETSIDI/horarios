@@ -99,6 +99,7 @@ csv2tt <- function(hh, nombre, semestre, itinerario = "",
 {
     hh <- as.data.table(hh)
     grupo <- as.character(hh$Grupo[1])
+    if (missing(nombre)) nombre <- grupo
     ## Si dos asignaturas coinciden en horario,
     ## las concatena en un único string
     ## Idem para el tipo, y además abreviamos su descripción
