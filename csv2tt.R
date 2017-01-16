@@ -133,6 +133,8 @@ csv2tt <- function(hh, nombre, semestre, itinerario = "",
                      formato = LETTERS[.GRP]),
              by = Asignatura]
     }
+    ## Ordena por dia y hora de inicio
+    setorder(hh, Dia, HoraInicio)
     ## Cabecera del documento, después del preambulo
     header <- c("\\begin{document}",
                 "\\begin{center}",
