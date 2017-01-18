@@ -134,7 +134,7 @@ shinyServer(function(input,output,session){
         }
 
         info('PDFs generados correctamente.')
-        }
+    })
     ## Publico PDFs en web
     observeEvent(input$publish,
     {
