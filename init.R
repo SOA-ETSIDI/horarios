@@ -4,7 +4,7 @@ semestres <- c("Septiembre-Enero", "Febrero-Junio")
 
 source('csv2tt.R')
 
-pdfFolder <- "pdfs/"
+pdfFolder <- "pdfs"
 tipoFolder <- file.path(pdfFolder, 'tipo')
 asigFolder <- file.path(pdfFolder, 'asignatura')
 

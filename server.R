@@ -17,6 +17,7 @@ shinyServer(function(input,output,session){
            c("Grupo", "Semestre", "Titulacion") := NULL]
         values$data <- dt
         file.copy(file.path(tipoFolder,
+                            paste0('S', semestre), 
                             paste0(grupo, '_', semestre, '.pdf')),
                   tempdir(),
                   overwrite = TRUE)
@@ -113,18 +114,23 @@ shinyServer(function(input,output,session){
         ## Graba la tabla csv
         escribeHorario(df, grupo, semestre)
         info('Tabla modificada correctamente.')
+        ## Rutas de ficheros PDFs
+        tipoSemFolder <- file.path(tipoFolder,
+                                   paste0('S', semestre))
+        asigSemFolder <- file.path(asigFolder,
+                                   paste0('S', semestre))
         ## Genera PDF con color por asignatura
         csv2tt(df, grupo, semestre,
                colorByTipo = TRUE,
-               dest = tipoFolder)
+               dest = tipoSemFolder)
         ## Genera PDF con color por asignatura
         csv2tt(df, grupo, semestre,
                colorByTipo = FALSE,
-               dest = asigFolder)
+               dest = asigSemFolder)
         info('PDFs generados correctamente.')
         ## Vuelca en webdav
-        copyWeb(grupo, semestre, tipoFolder, webTipo)
-        copyWeb(grupo, semestre, asigFolder, webAsignatura)
+        copyWeb(grupo, semestre, tipoSemFolder, webTipo)
+        copyWeb(grupo, semestre, asigSemFolder, webAsignatura)
         ## Actualizo el fichero completo del semestre
         for (folder in file.path(webdav, c('tipo', 'asignatura')))
         {
