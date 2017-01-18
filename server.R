@@ -127,22 +127,31 @@ shinyServer(function(input,output,session){
         csv2tt(df, grupo, semestre,
                colorByTipo = FALSE,
                dest = asigSemFolder)
+        ## Actualizo el fichero completo del semestre
+        for (folder in file.path(pdfFolder, c('tipo', 'asignatura')))
+        {
+            actualizaPDF(folder, semestre)
+        }
+
         info('PDFs generados correctamente.')
+        }
+    ## Publico PDFs en web
+    observeEvent(input$publish,
+    {
+        semestre <- which(semestres == input$semestre)
+        grupo <- input$grupo
+        ## Rutas de ficheros PDFs
+        tipoSemFolder <- file.path(tipoFolder,
+                                   paste0('S', semestre))
+        asigSemFolder <- file.path(asigFolder,
+                                   paste0('S', semestre))
         ## Vuelca en webdav
         copyWeb(grupo, semestre, tipoSemFolder, webTipo)
         copyWeb(grupo, semestre, asigSemFolder, webAsignatura)
         ## Actualizo el fichero completo del semestre
         for (folder in file.path(webdav, c('tipo', 'asignatura')))
         {
-            pdfs <- file.path(folder,
-                              paste0('S', semestre),
-                              paste0(grupos, "_", semestre, ".pdf"))
-            result <- file.path(folder,
-                                paste0("ETSIDI_2016_2017_Grado_S",
-                                       semestre, ".pdf"))
-            system2('pdftk',
-                    c(pdfs, "cat output", result)
-                    )
+            actualizaPDF(folder, semestre)
         }
         ## Mensaje para usuario si nada falla
         info('Horarios publicados.')

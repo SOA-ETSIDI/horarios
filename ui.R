@@ -41,9 +41,14 @@ editor <- div(id = 'editor',
               ),
               br(),
               fluidRow(
-                  column(12,
+                  column(3,
                          actionButton("update",
                                       "Confirmar",
+                                      icon = icon("check"))
+                         ),
+                  column(3,
+                         actionButton("publish",
+                                      "Publicar",
                                       icon = icon("check"))
                          )
               ))

@@ -12,6 +12,22 @@ webdav <- '/var/www/webdav/horarios/grado'
 webTipo <- file.path(webdav, 'tipo')
 webAsignatura <- file.path(webdav, 'asignatura')
 
+cursoActual <- '2016_2017'
+
+actualizaPDF <- function(ruta, semestre)
+{
+    pdfs <- file.path(ruta,
+                      paste0('S', semestre),
+                      paste0(grupos, "_", semestre, ".pdf"))
+    result <- file.path(ruta,
+                        paste0("ETSIDI_", cursoActual,
+                               "_Grado_S", semestre,
+                               ".pdf"))
+    system2('pdftk',
+            c(pdfs, "cat output", result)
+            )
+}
+
 copyWeb <- function(grupo, semestre, from, to)
 {
     fichero <- paste0(grupo, '_', semestre, '.pdf')
