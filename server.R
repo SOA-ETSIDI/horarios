@@ -94,9 +94,14 @@ shinyServer(function(input,output,session){
         grupo <- input$grupo
         df$Grupo <- grupo
         ## Genero timetable PDF en directorio temporal
-        csv2tt(df, grupo, semestre,
-               colorByTipo = TRUE,
-               dest = tempdir())
+        if (any(df$Itinerario != ""))
+            ttItinerario(df, grupo, semestre,
+                         colorByTipo = TRUE,
+                         dest = tempdir())
+        else 
+            csv2tt(df, grupo, semestre,
+                   colorByTipo = TRUE,
+                   dest = tempdir())
     })
     ## Grabo datos en csv
     observeEvent(input$update,
@@ -119,14 +124,24 @@ shinyServer(function(input,output,session){
                                    paste0('S', semestre))
         asigSemFolder <- file.path(asigFolder,
                                    paste0('S', semestre))
+        ## Genera PDF con color por tipo
+        if (any(df$Itinerario != ""))
+            ttItinerario(df, grupo, semestre,
+                         colorByTipo = TRUE,
+                         dest = tipoSemFolder)
+        else 
+            csv2tt(df, grupo, semestre,
+                   colorByTipo = TRUE,
+                   dest = tipoSemFolder)
         ## Genera PDF con color por asignatura
-        csv2tt(df, grupo, semestre,
-               colorByTipo = TRUE,
-               dest = tipoSemFolder)
-        ## Genera PDF con color por asignatura
-        csv2tt(df, grupo, semestre,
-               colorByTipo = FALSE,
-               dest = asigSemFolder)
+        if (any(df$Itinerario != ""))
+            ttItinerario(df, grupo, semestre,
+                         colorByTipo = FALSE,
+                         dest = asigSemFolder)
+        else
+            csv2tt(df, grupo, semestre,
+                   colorByTipo = FALSE,
+                   dest = asigSemFolder)
         ## Actualizo el fichero completo del semestre
         for (folder in file.path(pdfFolder, c('tipo', 'asignatura')))
         {

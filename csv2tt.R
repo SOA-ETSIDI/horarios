@@ -193,3 +193,25 @@ csv2tt <- function(hh, nombre, semestre, itinerario = "",
 ##    file.remove(c('LogoETSIDI.pdf', 'LogoUPM.pdf'))
 }
 
+ttItinerario <- function(hh, nombre, semestre, colorByTipo = TRUE, dest = tempdir())
+{
+    ## Genero un PDF para cada itinerario
+    csv2tt(hh[Itinerario %in% c("", "A")],
+           nombre, semestre, itinerario = "A",
+           colorByTipo = colorByTipo,
+           dest = dest)
+    csv2tt(hh[Itinerario %in% c("", "B")],
+           nombre, semestre, itinerario = "B",
+           colorByTipo = colorByTipo,
+           dest = dest)
+    ## Y los junto en un PDF común
+    old <- setwd(dest)
+    pdfs <- paste0(nombre, c("A", "B"), "_", semestre, ".pdf")
+    system2('pdftk', c(pdfs, 
+                       "cat",
+                       "output",
+                       paste0(nombre, "_", semestre, ".pdf")))
+    ## borrando los individuales
+    file.remove(pdfs)
+    setwd(old)
+}
