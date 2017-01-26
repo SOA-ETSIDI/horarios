@@ -30,7 +30,7 @@ dth <- horarios[Semestre == semestreActual,
                 )]
 setkey(dth, Asignatura, Tipo, Grupo, Dia)
 ## Me quedo con los registros únicos (elimino las duplicidades por diferentes horas de inicio)
-dth <- unique(dth)
+##dth <- unique(dth)
 
 source('csv2tt.R')
 
