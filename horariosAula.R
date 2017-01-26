@@ -4,7 +4,7 @@ source('../misc/funciones.R')
 source('../misc/defs.R')
 semestres <- c("Septiembre-Enero", "Febrero-Junio")
 
-semestreActual <- 1
+semestreActual <- 2
 cursoActual <- '2016-17'
 
 ## Horarios con aulas
@@ -36,8 +36,14 @@ source('csv2tt.R')
 
 aulas <- levels(factor(dth$Aula))
 
-for (aula in aulas){
-    try(csv2tt(dth[Aula == aula], nombre = aula, semestre = 1, colorByTipo = FALSE))
+for (aula in aulas)
+{
+    xx <- dth[Aula == aula]
+    xx[, Aula := Grupo]
+    try(csv2tt(xx,
+               nombre = aula,
+               semestre = semestreActual,
+               colorByTipo = FALSE))
 }
 
 
