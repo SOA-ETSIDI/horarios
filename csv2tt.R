@@ -185,6 +185,7 @@ csv2tt <- function(hh, nombre, semestre, itinerario = "",
     old <- setwd(dest)
     on.exit(setwd(old))
     texFile <- paste0(nombre, itinerario, "_", semestre, ".tex")
+    texFile <- make.names(texFile)
     writeLines(c(preamble, header, tuthTex, comida, htex, ending),
                con = texFile)
     system2('pdflatex', texFile)
