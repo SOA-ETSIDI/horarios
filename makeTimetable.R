@@ -131,9 +131,9 @@ for (s in 1:2)
         MUIP <- leeHorario("56AA", s)
         ## Genero un PDF para cada itinerario
         csv2tt(MUIP[Itinerario %in% c("", "Investigador")],
-               "MUIP", s, "Investigador")
+               "MUIP", s, "Investigador (Aula Máster 3)")
         csv2tt(MUIP[Itinerario %in% c("", "Profesional")],
-               "MUIP", s, "Profesional")
+               "MUIP", s, "Profesional (Aula Máster 4)")
         ## Y los junto en un PDF común
         old <- setwd(tempdir())
         pdfs <- paste0("56AA", c("Profesional", "Investigador"), "_", s, ".pdf")
@@ -162,9 +162,9 @@ for (s in 1:2)
         MUIE <- leeHorario("56AB", s)
         ## Genero un PDF para cada itinerario
         csv2tt(MUIE[Itinerario %in% c("", "Mecatrónica")],
-               "MUIE", s, "Mecatrónica")
+               "MUIE", s, "Mecatrónica (Aula Máster 2 )")
         csv2tt(MUIE[Itinerario %in% c("", "Distribución")],
-               "MUIE", s, "Distribución")
+               "MUIE", s, "Distribución (Aula Máster 1)")
         ## Y los junto en un PDF común
         old <- setwd(tempdir())
         pdfs <- paste0("56AB", c("Mecatrónica", "Distribución"), "_", s, ".pdf")
