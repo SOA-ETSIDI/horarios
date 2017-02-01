@@ -161,15 +161,18 @@ shinyServer(function(input,output,session){
         asigSemFolder <- file.path(asigFolder,
                                    paste0('S', semestre))
         ## Vuelca en webdav
-        copyWeb(grupo, semestre, tipoSemFolder, webTipo)
-        copyWeb(grupo, semestre, asigSemFolder, webAsignatura)
-        ## Actualizo el fichero completo del semestre
-        for (folder in file.path(webdav, c('tipo', 'asignatura')))
+        okWebTipo <- copyWeb(grupo, semestre, tipoSemFolder, webTipo)
+        okWebAsig <- copyWeb(grupo, semestre, asigSemFolder, webAsignatura)
+        if (okWebTipo & okWebAsig)
         {
-            actualizaPDF(folder, semestre)
-        }
-        ## Mensaje para usuario si nada falla
-        info('Horarios publicados.')
+            ## Actualizo el fichero completo del semestre
+            for (folder in file.path(webdav, c('tipo', 'asignatura')))
+            {
+                actualizaPDF(folder, semestre)
+            }
+            ## Mensaje para usuario si nada falla
+            info('Horarios publicados.')
+        } else info('Error al publicar.')
     })
     
 }) 
