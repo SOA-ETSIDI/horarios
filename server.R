@@ -134,7 +134,7 @@ shinyServer(function(input,output,session){
                    colorByTipo = TRUE,
                    dest = tipoSemFolder)
         ## Genera PDF con color por asignatura
-        if (any(df$Itinerario != ""))
+        if (any(df$Itinerario %in% c('A', 'B')))
             ttItinerario(df, grupo, semestre,
                          colorByTipo = FALSE,
                          dest = asigSemFolder)
