@@ -34,16 +34,27 @@ setkey(dth, Asignatura, Tipo, Grupo, Dia)
 
 source('csv2tt.R')
 
-aulas <- levels(factor(dth$Aula))
+aulasMaster <- aulas %in% paste0("Master", 1:4)
+aulasGrado <- aulas[!aulasMaster]
 
-for (aula in aulas)
+for (aula in aulasGrado)
 {
     xx <- dth[Aula == aula]
-    xx[, Aula := Grupo]
+    if (nrow(xx) > 0)
+    {
+     xx[, Aula := Grupo]
     try(csv2tt(xx,
                nombre = aula,
                semestre = semestreActual,
-               colorByTipo = FALSE))
+               colorByTipo = FALSE))   
+    }
 }
 
+old <- setwd(tempdir())
+file.remove(c("LogoETSIDI.pdf", "LogoUPM.pdf"))
+pdfs <- dir(pattern = 'pdf')
 
+system2("pdftk", c(paste(pdfs, collapse = " "),
+                   "cat output",
+                   "Ocupacion_Aulas_2S.pdf"))
+setwd(old)
