@@ -1,6 +1,6 @@
 "Dia";"Asignatura";"Tipo";"HoraInicio";"HoraFinal";"Aula";"Grupo";"Semestre";"Titulacion"
-"Lunes";"Ingeniería Gráfica";"Teoría y Problemas";"09:15";"11:15";"ADI-2";"DM201";2;"56DM"
-"Lunes";"Ingeniería Gráfica";"Laboratorio";"09:15";"11:15";"ADI-2";"DM201";2;"56DM"
+"Lunes";"Ingeniería Gráfica";"Teoría y Problemas";"09:15";"11:15";"";"DM201";2;"56DM"
+"Lunes";"Ingeniería Gráfica";"Laboratorio";"09:15";"11:15";"";"DM201";2;"56DM"
 "Lunes";"Transmisión de Calor";"Teoría y Problemas";"11:45";"13:45";"M201";"DM201";2;"56DM"
 "Lunes";"Metodología del Diseño y la Creatividad";"Acciones Cooperativas";"15:15";"17:15";"A26";"DM201";2;"56DM"
 "Lunes";"Transmisión de Calor";"Laboratorio";"15:15";"17:15";"M201";"DM201";2;"56DM"
