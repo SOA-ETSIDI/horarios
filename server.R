@@ -44,7 +44,7 @@ shinyServer(function(input,output,session){
                        type = 'autocomplete',
                        strict = TRUE)
         hot <- hot_col(hot, col = "Asignatura",
-                       source = levels(df$Asignatura),
+                       source = asignaturas,
                        type = 'autocomplete',
                        strict = TRUE)
         hot <- hot_col(hot, col = "HoraInicio",
@@ -150,30 +150,30 @@ shinyServer(function(input,output,session){
 
         info('PDFs generados correctamente.')
     })
-    ## Publico PDFs en web
-    observeEvent(input$publish,
-    {
-        semestre <- which(semestres == input$semestre)
-        grupo <- input$grupo
-        ## Rutas de ficheros PDFs
-        tipoSemFolder <- file.path(tipoFolder,
-                                   paste0('S', semestre))
-        asigSemFolder <- file.path(asigFolder,
-                                   paste0('S', semestre))
-        ## Vuelca en webdav
-        okWebTipo <- copyWeb(grupo, semestre, tipoSemFolder, webTipo)
-        okWebAsig <- copyWeb(grupo, semestre, asigSemFolder, webAsignatura)
-        if (okWebTipo & okWebAsig)
-        {
-            ## Actualizo el fichero completo del semestre
-            for (folder in file.path(webdav, c('tipo', 'asignatura')))
-            {
-                actualizaPDF(folder, semestre)
-            }
-            ## Mensaje para usuario si nada falla
-            info('Horarios publicados.')
-        } else info('Error al publicar.')
-    })
+    ## ## Publico PDFs en web
+    ## observeEvent(input$publish,
+    ## {
+    ##     semestre <- which(semestres == input$semestre)
+    ##     grupo <- input$grupo
+    ##     ## Rutas de ficheros PDFs
+    ##     tipoSemFolder <- file.path(tipoFolder,
+    ##                                paste0('S', semestre))
+    ##     asigSemFolder <- file.path(asigFolder,
+    ##                                paste0('S', semestre))
+    ##     ## Vuelca en webdav
+    ##     okWebTipo <- copyWeb(grupo, semestre, tipoSemFolder, webTipo)
+    ##     okWebAsig <- copyWeb(grupo, semestre, asigSemFolder, webAsignatura)
+    ##     if (okWebTipo & okWebAsig)
+    ##     {
+    ##         ## Actualizo el fichero completo del semestre
+    ##         for (folder in file.path(webdav, c('tipo', 'asignatura')))
+    ##         {
+    ##             actualizaPDF(folder, semestre)
+    ##         }
+    ##         ## Mensaje para usuario si nada falla
+    ##         info('Horarios publicados.')
+    ##     } else info('Error al publicar.')
+    ## })
     
 }) 
 
