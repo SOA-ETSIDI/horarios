@@ -1,8 +1,6 @@
-library(openxlsx)
 library(data.table)
 
-source('csv2tt.R')
-source('../misc/defs.R')
+source('init.R')
 
 pdfFolder <- 'pdfs'
 
@@ -63,67 +61,15 @@ for (g in myGrupos)
 }
 
 ## Uno todos los PDFs en uno por semestre
-pdfS1 <- paste0(grupos, "_1.pdf")
-for (folder in file.path(pdfFolder, c('tipo', 'asignatura'), 'S1'))
-{
-    old <- setwd(folder)
-    system2('pdftk', c(pdfS1,
-                       "cat",
-                       "output ETSIDI_2016_2017_Grado_S1.pdf"))
-    system2('mv', 'ETSIDI_2016_2017_Grado_S1.pdf ../')
-    system2('rm', 'Logo*.pdf')
-    setwd(old)
-}
+actualizaPDF(file.path(pdfFolder, "tipo"), 1)
+actualizaPDF(file.path(pdfFolder, "tipo"), 2)
 
-pdfS2 <- paste0(grupos, "_2.pdf")
-for (folder in file.path(pdfFolder, c('tipo', 'asignatura'), 'S2'))
-{
-    old <- setwd(folder)
-    system2('pdftk', c(pdfS2,
-                       "cat",
-                       "output ETSIDI_2016_2017_Grado_S2.pdf"))
-    system2('mv', 'ETSIDI_2016_2017_Grado_S2.pdf ../')
-    system2('rm', 'Logo*.pdf')
-    setwd(old)
-}
+actualizaPDF(file.path(pdfFolder, "asignatura"), 1)
+actualizaPDF(file.path(pdfFolder, "asignatura"), 2)
 
 
 
-## Genero libro excel
 
-## S1
-S1 <- lapply(grupos, leeHorario, semestre = 1)
-names(S1) <- grupos
-
-old <- setwd(tempdir())
-xls1 <- write.xlsx(S1,
-                  file = "ETSIDI_2016_2017_Grado_S1.xlsx",
-                  creator = 'SOA-ETSIDI')
-lapply(seq_along(grupos), function(i)
-{
-    setColWidths(xls1, sheet = i,
-                 cols = 1:9,
-                 widths = "auto")
-})
-saveWorkbook(xls1, file = "ETSIDI_2016_2017_Grado_S1.xlsx", overwrite = TRUE)
-setwd(old)
-
-S2 <- lapply(grupos, leeHorario, semestre = 2)
-names(S2) <- grupos
-
-old <- setwd(tempdir())
-xls2 <- write.xlsx(S2,
-                  file = "ETSIDI_2016_2017_Grado_S2.xlsx",
-                  creator = 'SOA-ETSIDI')
-lapply(seq_along(grupos), function(i)
-{
-    setColWidths(xls2, sheet = i,
-                 cols = 1:9,
-                 widths = "auto")
-})
-saveWorkbook(xls2, file = "ETSIDI_2016_2017_Grado_S2.xlsx", overwrite = TRUE)
-setwd(old)
-
 ## MASTERES
 ## MUIP
 for (s in 1:2)
