@@ -6,7 +6,7 @@ source('csv2tt.R')
 
 ## Incluye nuevos grupos (por definir) de doble grado
 grupos <- c("M101", "D102", "Q103", "A104", "E105", "EE105",
-            "M106", "D107", "DM107", "Q108", "A109", "E100", 
+            "M106", "D107", "DM107", "A109", "E100", 
             "M201", "DM201", "D202", "Q203", "A204", "E205",
             "M206", "A207", "E208", "EE208",
             "M301", "A302", "E303", "EE309",
