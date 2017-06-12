@@ -2,6 +2,8 @@
 .Rhistory
 .Rapp.history
 *~
+# Logos
+Logo*.pdf
 
 # Session Data files
 .RData
