@@ -1,7 +1,6 @@
 "Dia";"Asignatura";"Tipo";"HoraInicio";"HoraFinal";"Aula";"Grupo";"Semestre";"Titulacion"
 "Lunes";"Métodos Numéricos en Ingeniería Eléctrica";"Teoría y Problemas";"09:15";"11:15";"E105";"EE105";2;"56EE"
 "Lunes";"Ampliación de Matemáticas";"Teoría y Problemas";"11:45";"13:45";"E105";"EE105";2;"56EE"
-"Lunes";"Informática";"Laboratorio";"15:15";"17:15";"E105";"EE105";2;"56EE"
 "Martes";"Física II";"Teoría y Problemas";"09:15";"11:15";"E105";"EE105";2;"56EE"
 "Martes";"Estadística";"Teoría y Problemas";"11:45";"13:45";"E105";"EE105";2;"56EE"
 "Martes";"Estadística";"Laboratorio";"13:45";"14:45";"E105";"EE105";2;"56EE"
@@ -16,4 +15,3 @@
 "Jueves";"Física II";"Laboratorio";"15:15";"18:15";"E105";"EE105";2;"56EE"
 "Viernes";"Estadística";"Teoría y Problemas";"09:15";"11:15";"E105";"EE105";2;"56EE"
 "Viernes";"Informática";"Teoría y Problemas";"11:45";"13:45";"E105";"EE105";2;"56EE"
-"Viernes";"Informática";"Laboratorio";"15:15";"18:15";"E105";"EE105";2;"56EE"
