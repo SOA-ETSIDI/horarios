@@ -72,32 +72,18 @@ actualizaPDF(file.path(pdfFolder, "asignatura"), 2)
 
 ## MASTERES
 ## MUIP
+
 for (s in 1:2)
 {
         MUIP <- leeHorario("56AA", s)
-        ## Genero un PDF para cada itinerario
-        csv2tt(MUIP[Itinerario %in% c("", "Investigador")],
-               "MUIP", s, "Investigador (Aula Máster 3)")
-        csv2tt(MUIP[Itinerario %in% c("", "Profesional")],
-               "MUIP", s, "Profesional (Aula Máster 4)")
-        ## Y los junto en un PDF común
-        old <- setwd(tempdir())
-        pdfs <- paste0("56AA", c("Profesional", "Investigador"), "_", s, ".pdf")
-        system2('pdftk', c(pdfs, 
-                           "cat",
-                           "output",
-                           paste0("56AA", "_", s, ".pdf")))
-        ## borrando los individuales
-        file.remove(pdfs)
-        system2('pdftk',
-                c("56AA_1.pdf", "56AA_2.pdf",
-                  "cat",
-                  "output 56AA.pdf"))
-        setwd(old)
-} 
+        csv2tt(MUIP,
+               "MUIP", s,
+               hInicio = 15, hFin = 21,
+               hourHeight = 2)
+}
 old <- setwd(tempdir())
 system2('pdftk',
-        c("56AA_1.pdf", "56AA_2.pdf",
+        c("MUIP_1.pdf", "MUIP_2.pdf",
           "cat",
           "output 56AA.pdf"))
 setwd(old)
@@ -106,25 +92,14 @@ setwd(old)
 for (s in 1:2)
 {
         MUIE <- leeHorario("56AB", s)
-        ## Genero un PDF para cada itinerario
-        csv2tt(MUIE[Itinerario %in% c("", "Mecatrónica")],
-               "MUIE", s, "Mecatrónica (Aula Máster 2 )")
-        csv2tt(MUIE[Itinerario %in% c("", "Distribución")],
-               "MUIE", s, "Distribución (Aula Máster 1)")
-        ## Y los junto en un PDF común
-        old <- setwd(tempdir())
-        pdfs <- paste0("56AB", c("Mecatrónica", "Distribución"), "_", s, ".pdf")
-        system2('pdftk', c(pdfs, 
-                           "cat",
-                           "output",
-                           paste0("56AB", "_", s, ".pdf")))
-        ## borrando los individuales
-        file.remove(pdfs)
-        setwd(old)
-} 
+        csv2tt(MUIE,
+               "MUIE", s,
+               hInicio = 16, hFin = 21,
+               hourHeight = 2)
+}
 old <- setwd(tempdir())
 system2('pdftk',
-        c("56AB_1.pdf", "56AB_2.pdf",
+        c("MUIE_1.pdf", "MUIE_2.pdf",
           "cat",
           "output 56AB.pdf"))
 setwd(old)
@@ -135,11 +110,13 @@ for (s in 1:2)
 {
         MUIDI <- leeHorario("56AC", s)
         csv2tt(MUIDI,
-               "MUIDI", s)
+               "MUIDI", s,
+               hInicio = 8, hFin = 15,
+               hourHeight = 1.8)
 }
 old <- setwd(tempdir())
 system2('pdftk',
-        c("56AC_1.pdf", "56AC_2.pdf",
+        c("MUIDI_1.pdf", "MUIDI_2.pdf",
           "cat",
           "output 56AC.pdf"))
 setwd(old)

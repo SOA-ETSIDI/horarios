@@ -95,6 +95,7 @@ csv2tt <- function(hh, nombre, semestre, itinerario = "",
                    colorByTipo = TRUE,
                    dest = tempdir(),
                    preamble = template,
+                   hInicio = 8, hFin = 21, hourHeight = 1.1,
                    semString = semestres)
 {
     hh <- as.data.table(hh)
@@ -142,7 +143,9 @@ csv2tt <- function(hh, nombre, semestre, itinerario = "",
                        paste(nombre, itinerario),
                        " (", semString[semestre],
                        ")", "}"),
-                "\\begin{timetable}{8}{21}")
+                "\\begin{timetable}{",
+                hInicio, "}{", hFin, "}{",
+                hourHeight, "}")
     ## Hora tuthora y comidas: en los másteres no hay.
     if (grupo %in% c('56AA', '56AB', '56AC'))
     {
