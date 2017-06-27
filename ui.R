@@ -45,7 +45,7 @@ editor <- div(id = 'editor',
                          actionButton("update",
                                       "Confirmar",
                                       icon = icon("check"))
-                         )## ,
+                         ),
                   column(3,
                          actionButton("publish",
                                       "Publicar",
