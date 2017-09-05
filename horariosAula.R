@@ -4,8 +4,8 @@ source('../misc/funciones.R')
 source('../misc/defs.R')
 semestres <- c("Septiembre-Enero", "Febrero-Junio")
 
-semestreActual <- 2
-cursoActual <- '2016-17'
+semestreActual <- 1
+cursoActual <- '2017-18'
 
 ## Horarios con aulas
 horariosPath <- '../horarios/csv/'
