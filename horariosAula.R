@@ -32,14 +32,38 @@ setkey(dth, Asignatura, Tipo, Grupo, Dia)
 ## Me quedo con los registros únicos (elimino las duplicidades por diferentes horas de inicio)
 ##dth <- unique(dth)
 
+## Genera tablas de ocupación
 source('csv2tt.R')
 
-aulasMaster <- aulas %in% paste0("Master", 1:4)
-aulasGrado <- aulas[!aulasMaster]
+## Ocupación Aulas de Grado
+aulasGrado <- c("A10", "A11", "A12", "A13",
+                "A21", "A22", "A23", "A24", "A25", "A26", "A27",
+                "A34", "A35",
+                "B11", "B12",
+                "B21", "B22",
+                "B31", "B32",
+                "B41", "B42")
 
 for (aula in aulasGrado)
 {
-    xx <- dth[Aula == aula]
+    xx <- dth[grepl(aula, Aula)]
+    if (nrow(xx) > 0)
+    {
+     xx[, Aula := Grupo]
+    try(csv2tt(xx,
+               nombre = aula,
+               semestre = semestreActual,
+               colorByTipo = FALSE))   
+    }
+}
+
+aulasMaster <- paste0("M", 1:4)
+
+## Aulas de Máster
+for (aula in aulasMaster)
+{
+    ##    xx <- dth[Aula == aula]
+    xx <- dth[grepl(aula, Aula)]
     if (nrow(xx) > 0)
     {
      xx[, Aula := Grupo]
@@ -56,5 +80,6 @@ pdfs <- dir(pattern = 'pdf')
 
 system2("pdftk", c(paste(pdfs, collapse = " "),
                    "cat output",
-                   "Ocupacion_Aulas_2S.pdf"))
+                   paste0("Ocupacion_Aulas_", semestreActual, "S.pdf")
+                   ))
 setwd(old)
