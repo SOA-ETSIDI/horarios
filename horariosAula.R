@@ -8,7 +8,7 @@ semestreActual <- 1
 cursoActual <- '2017-18'
 
 ## Horarios con aulas
-horariosPath <- '../horarios/csv/'
+horariosPath <- 'csv/'
 files <- dir(horariosPath, pattern = '.csv$')
 horarios <- rbindlist(lapply(paste0(horariosPath, files),
                              fread,
@@ -57,7 +57,7 @@ for (aula in aulasGrado)
     }
 }
 
-aulasMaster <- paste0("M", 1:4)
+aulasMaster <- paste0("Mstr", 1:4)
 
 ## Aulas de Máster
 for (aula in aulasMaster)
