@@ -53,7 +53,6 @@ for (aula in aulasGrado)
     try(csv2tt(xx,
                nombre = aula,
                semestre = semestreActual,
-               dest = webdavAula,
                colorByTipo = FALSE))   
     }
 }
@@ -71,12 +70,11 @@ for (aula in aulasMaster)
     try(csv2tt(xx,
                nombre = aula,
                semestre = semestreActual,
-               dest = webdavAula,
                colorByTipo = FALSE))   
     }
 }
 
-old <- setwd(webdavAula)
+old <- setwd(tempdir())
 file.remove(c("LogoETSIDI.pdf", "LogoUPM.pdf"))
 pdfs <- dir(pattern = 'pdf')
 
@@ -84,5 +82,8 @@ system2("pdftk", c(paste(pdfs, collapse = " "),
                    "cat output",
                    paste0("Ocupacion_Aulas_", semestreActual, "S.pdf")
                    ))
+
+file.copy(pdfs, webdavAula)
+
 setwd(old)
 
