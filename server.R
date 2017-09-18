@@ -172,6 +172,8 @@ shinyServer(function(input,output,session){
             }
             ## Mensaje para usuario si nada falla
             info('Horarios publicados.')
+            ## Actualizo aulas
+            source('horariosAula.R')
         } else info('Error al publicar.')
     })
     

@@ -5,7 +5,7 @@ source('../misc/defs.R')
 semestres <- c("Septiembre-Enero", "Febrero-Junio")
 
 semestreActual <- 1
-cursoActual <- '2017-18'
+webdavAula <- '/var/www/webdav/aulas/'
 
 ## Horarios con aulas
 horariosPath <- 'csv/'
@@ -53,6 +53,7 @@ for (aula in aulasGrado)
     try(csv2tt(xx,
                nombre = aula,
                semestre = semestreActual,
+               dest = webdavAula,
                colorByTipo = FALSE))   
     }
 }
@@ -70,11 +71,12 @@ for (aula in aulasMaster)
     try(csv2tt(xx,
                nombre = aula,
                semestre = semestreActual,
+               dest = webdavAula,
                colorByTipo = FALSE))   
     }
 }
 
-old <- setwd(tempdir())
+old <- setwd(webdavAula)
 file.remove(c("LogoETSIDI.pdf", "LogoUPM.pdf"))
 pdfs <- dir(pattern = 'pdf')
 
@@ -83,3 +85,4 @@ system2("pdftk", c(paste(pdfs, collapse = " "),
                    paste0("Ocupacion_Aulas_", semestreActual, "S.pdf")
                    ))
 setwd(old)
+
