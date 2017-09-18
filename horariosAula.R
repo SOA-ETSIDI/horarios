@@ -83,7 +83,7 @@ system2("pdftk", c(paste(pdfs, collapse = " "),
                    paste0("Ocupacion_Aulas_", semestreActual, "S.pdf")
                    ))
 
-file.copy(pdfs, webdavAula)
+file.copy(pdfs, webdavAula, overwrite = TRUE)
 
 setwd(old)
 
