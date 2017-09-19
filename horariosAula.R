@@ -78,12 +78,14 @@ old <- setwd(tempdir())
 file.remove(c("LogoETSIDI.pdf", "LogoUPM.pdf"))
 pdfs <- dir(pattern = 'pdf')
 
+completo <- paste0("Ocupacion_Aulas_", semestreActual, "S.pdf")
+
 system2("pdftk", c(paste(pdfs, collapse = " "),
                    "cat output",
-                   paste0("Ocupacion_Aulas_", semestreActual, "S.pdf")
-                   ))
+                   completo)
+                   )
 
-file.copy(pdfs, webdavAula, overwrite = TRUE)
+file.copy(c(pdfs, completo), webdavAula, overwrite = TRUE)
 
 setwd(old)
 
