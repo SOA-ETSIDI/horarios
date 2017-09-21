@@ -62,7 +62,6 @@ aulasMaster <- paste0("Mstr", 1:4)
 ## Aulas de Máster
 for (aula in aulasMaster)
 {
-    ##    xx <- dth[Aula == aula]
     xx <- dth[grepl(aula, Aula)]
     if (nrow(xx) > 0)
     {
@@ -76,7 +75,12 @@ for (aula in aulasMaster)
 
 old <- setwd(tempdir())
 file.remove(c("LogoETSIDI.pdf", "LogoUPM.pdf"))
-pdfs <- dir(pattern = 'pdf')
+pdfs <- c(paste0(aulasGrado, '_', semestreActual, '.pdf'),
+          paste0(aulasMaster, '_', semestreActual, '.pdf'))
+
+files <- dir(pattern = 'pdf')
+
+pdfs <- pdfs[pdfs %in% files]
 
 completo <- paste0("Ocupacion_Aulas_", semestreActual, "S.pdf")
 
