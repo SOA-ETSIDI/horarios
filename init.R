@@ -4,14 +4,6 @@ semestres <- c("Septiembre-Enero", "Febrero-Junio")
 
 source('csv2tt.R')
 
-grupos <- c("M101", "D102", "Q103", "A104", "E105", "EE105",
-            "M106", "D107", "DM107", "A109", "E100", 
-            "M201", "DM201", "D202", "Q203", "A204", "E205",
-            "M206", "A207", "E208", "EE208",
-            "M301", "A302", "E303", "EE309",
-            "M306", "D307", "DM306", "Q308", "A309",
-            "M401", "D402", "DM401", "DM406", "Q403", "A404",
-            "M406", "E407", "A408")
 
 asignaturas <- read.csv2('../misc/asignaturas.csv')$Asignatura
 asignaturas <- titlecase(levels(asignaturas))
