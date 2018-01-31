@@ -4,7 +4,6 @@ source('../misc/funciones.R')
 source('../misc/defs.R')
 semestres <- c("Septiembre-Enero", "Febrero-Junio")
 
-semestreActual <- 1
 webdavAula <- '/var/www/webdav/aulas/'
 
 ## Horarios con aulas
