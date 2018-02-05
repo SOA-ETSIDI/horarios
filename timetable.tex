@@ -4,8 +4,11 @@
 \usepackage[T1]{fontenc}
 \usepackage[left=2cm,right=2cm,top=2cm,bottom=2cm]{geometry}
 \usepackage[spanish]{babel}
+\usepackage[useregional]{datetime2}
 \usepackage{eso-pic}
 \newcommand\AtPageUpperRight[1]{\AtPageUpperLeft{%
+   \makebox[\paperwidth][r]{#1}}}
+\newcommand\AtPageLowerRight[1]{\AtPageLowerLeft{%
    \makebox[\paperwidth][r]{#1}}}
 
 \AddToShipoutPictureBG{%
@@ -19,6 +22,11 @@
     \raisebox{-1.1\height}{
       \includegraphics[width=0.12\textwidth]{LogoETSIDI.pdf}
     }}}
+
+\AddToShipoutPicture{
+  \AtPageLowerRight{\DTMnow}
+}
+
 
 % Will change name of weekdays
 \usepackage[spanish]{translator}
@@ -127,6 +135,7 @@
 {\BODY}
 
 \end{tikzpicture}
+
 		}%
 
 % TikZ style to display different subcalendars
