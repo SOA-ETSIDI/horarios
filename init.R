@@ -2,7 +2,6 @@ source('../misc/defs.R')
 source('../misc/funciones.R')
 
 semestres <- c("Septiembre-Enero", "Febrero-Junio")
-cursoActual <- '2017_2018'
 
 source('csv2tt.R')
 
