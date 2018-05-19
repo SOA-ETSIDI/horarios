@@ -132,7 +132,7 @@ csv2tt <- function(hh, nombre, semestre, itinerario = "",
                      Aula,
                      width,
                      formato = LETTERS[.GRP]),
-             by = Asignatura]
+                 by = Asignatura]
     }
     ## Ordena por dia y hora de inicio
     setorder(hh, Dia, HoraInicio)
@@ -153,18 +153,22 @@ csv2tt <- function(hh, nombre, semestre, itinerario = "",
         comida <- ""
     } else
     {
-    ## Hora tuthora, dependiendo de grupo de mañana o tarde
-    tuthora <- ifelse(MoT(grupo) == "M",
-                      "{11.15}{11.45}",
-                      "{17.15}{17.45}")
-    tuthTex <- paste0("\\shortcalentry[tut]{", 1:5,
-                      "}", tuthora,
-                      "{Hora Tuthora}{}")
+        ## Hora tuthora, dependiendo de grupo de mañana o tarde
+        tuthora <- ifelse(MoT(grupo) == "M",
+                          braces(tuthoraM),
+                          braces(tuthoraT))
+        tuthTex <- paste0("\\shortcalentry[tut]{", 1:5,
+                          "}", tuthora,
+                          "{Hora Tuthora}{}")
 
-    ## Horario de comida
-    comida <- paste0("\\shortcalentry[free]{", 1:5,
-                      "}", "{13.45}{15.15}",
-                     "{Comida}{}")
+        ## Horario de comida
+        comida <- ifelse(MoT(grupo) == "M",
+                         braces(comedorM),
+                         braces(comedorT))
+
+        comidaTex <- paste0("\\shortcalentry[free]{", 1:5, "}",
+                            comida,
+                            "{Comida}{}")
         
     }
     ## Franjas horarias de docencia
@@ -183,18 +187,18 @@ csv2tt <- function(hh, nombre, semestre, itinerario = "",
                 "\\end{document}")
     ## Logos
     file.copy(paste0('../misc/',
-                    c('LogoETSIDI.pdf', 'LogoUPM.pdf')),
+                     c('LogoETSIDI.pdf', 'LogoUPM.pdf')),
               dest)
     old <- setwd(dest)
     on.exit(setwd(old))
     texFile <- paste0(nombre, itinerario, "_", semestre, ".tex")
     texFile <- make.names(texFile)
-    writeLines(c(preamble, header, tuthTex, comida, htex, ending),
+    writeLines(c(preamble, header, tuthTex, comidaTex, htex, ending),
                con = texFile)
     system2('pdflatex', texFile)
     files2clean <- list.files('.', "(tex|log|aux)")
     file.remove(files2clean)
-##    file.remove(c('LogoETSIDI.pdf', 'LogoUPM.pdf'))
+    ##    file.remove(c('LogoETSIDI.pdf', 'LogoUPM.pdf'))
 }
 
 ttItinerario <- function(hh, nombre, semestre, colorByTipo = TRUE, dest = tempdir())
