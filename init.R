@@ -4,7 +4,8 @@ source('../misc/funciones.R')
 semestres <- c("Septiembre-Enero", "Febrero-Junio")
 
 source('csv2tt.R')
-
+## Horas posibles en selector
+horas <- hhSeq(h1 = "08:00", h2 = "21:30", by = "30 min")
 
 asignaturas <- read.csv2('../misc/asignaturas.csv')$Asignatura
 asignaturas <- titlecase(levels(asignaturas))

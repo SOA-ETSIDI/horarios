@@ -38,8 +38,6 @@ formatHora2 <- function(x)
     format(as.POSIXct(x, format='%H:%M'),
            format = '%H.%M')
 }
-## Horas posibles en selector
-horas <- hhSeq(h1 = "08:15", h2 = "21:15", by = "30 min")
 
 ## Utilidad para juntar en una cadena asignaturas o tipos de docencia que coinciden en horario
 join <- function(x, collapse = ' \\\\ ')
