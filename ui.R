@@ -7,10 +7,6 @@ source('init.R')
 addResourcePath("pdfs", tempdir())
                 
 
-logoUPM <- "http://www.upm.es/sfs/Rectorado/Gabinete%20del%20Rector/Logos/UPM/EscPolitecnica/EscUpmPolit_p.gif"
-logoETSIDI <- "http://www.upm.es/sfs/Rectorado/Gabinete%20del%20Rector/Logos/EUIT_Industrial/ETSI%20DISEN%C2%A6%C3%A2O%20INDUSTRIAL%20pqn%C2%A6%C3%A2.png"
-
-
 ## Cabecera con logos
 header <- fluidRow(
     column(4, align = 'center', img(src = logoUPM)),
