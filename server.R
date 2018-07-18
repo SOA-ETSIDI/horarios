@@ -107,14 +107,16 @@ shinyServer(function(input,output,session){
         semestre <- which(semestres == input$semestre)
         grupo <- input$grupo
         df$Grupo <- grupo
+        ## Color por tipo o por asignatura
+        colorTipo <- !input$color
         ## Genero timetable PDF en directorio temporal
         if (any(df$Itinerario %in% c('A', 'B')))
             ttItinerario(df, grupo, semestre,
-                         colorByTipo = TRUE,
+                         colorByTipo = colorTipo,
                          dest = tempdir())
         else 
             csv2tt(df, grupo, semestre,
-                   colorByTipo = TRUE,
+                   colorByTipo = colorTipo,
                    dest = tempdir())
     })
     ## Grabo datos en csv
@@ -155,11 +157,17 @@ shinyServer(function(input,output,session){
         }
         else
         {## Horario sin itinerario
-            if (input$grupo %in% masters)
-                ## Genera PDF para master 
-                csv2tt(df, grupo, semestre,
-                       colorByTipo = TRUE,
+            if (grupo %in% masters)
+            {
+                ## En master usamos nombre de titulación para
+                ## encabezar el horario
+                idx <- match(grupo, masters)
+                titulo <- names(masters)[idx]
+                ## Genera PDF para master coloreando por asignatura
+                csv2tt(df, titulo, semestre,
+                       colorByTipo = FALSE,
                        dest = masterSemFolder)
+            }
             else
                 {##Horario de grado
                     ## Genera PDF con color por tipo 

@@ -50,11 +50,16 @@ editor <- div(id = 'editor',
               ))
 
 pdfUI <- div(id = 'pdfUI',
-             fluidRow(column(12,
+             fluidRow(column(3,
                              actionButton("refresh",
                                           "Actualizar",
                                           icon = icon("refresh"))
-                             )),
+                             ),
+                      column(3,
+                             checkboxInput("color",
+                                           "Color por Asignatura"
+                                           )
+                            )),
              fluidRow(column(12,
                              htmlOutput("pdfViewer")
                              ))
