@@ -1,10 +1,8 @@
 "Dia";"Asignatura";"Tipo";"HoraInicio";"HoraFinal";"Aula";"Itinerario";"Grupo";"Semestre";"Titulacion"
-"Lunes";"Diseño y Desarrollo de Productos";"Teoría y Problemas";"16:00";"20:30";"";"";"56AD";1;"56AD"
-"Lunes";"Diseño y Fabricación Asistidos por Ordenador (CAD-CAM)";"Teoría y Problemas";"16:00";"20:30";"";"";"56AD";1;"56AD"
-"Martes";"Ingeniería de la Calidad Total";"Teoría y Problemas";"16:00";"18:30";"";"";"56AD";1;"56AD"
-"Miércoles";"Ingeniería de Procesos Productivos";"Teoría y Problemas";"16:00";"18:30";"";"";"56AD";1;"56AD"
-"Miércoles";"Producción Limpia, Ecología Industrial y Desarrollo Sostenible";"Teoría y Problemas";"18:30";"20:00";"";"";"56AD";1;"56AD"
-"Jueves";"Automatización y Robótica";"Teoría y Problemas";"15:30";"17:30";"";"";"56AD";1;"56AD"
-"Jueves";"Matemáticas aplicadas a la Ingeniería de la Producción";"Teoría y Problemas";"17:30";"19:30";"";"";"56AD";1;"56AD"
-
-
+"Lunes";"Diseño y Desarrollo de Productos";"Teoría y Problemas";"16:00";"20:30";"Mstr3";"";"56AD";1;"56I"
+"Lunes";"Diseño y Fabricación Asistidos por Ordenador (CAD-CAM)";"Teoría y Problemas";"16:00";"20:30";"Mstr3";"";"56AD";1;"56I"
+"Martes";"Ingeniería de la Calidad Total";"Teoría y Problemas";"16:00";"18:30";"Mstr3";"";"56AD";1;"56I"
+"Miércoles";"Ingeniería de Procesos Productivos";"Teoría y Problemas";"16:00";"18:30";"Mstr3";"";"56AD";1;"56I"
+"Miércoles";"Producción Limpia, Ecología Industrial y Desarrollo Sostenible";"Teoría y Problemas";"18:30";"20:00";"Mstr3";"";"56AD";1;"56I"
+"Jueves";"Automatización y Robótica";"Teoría y Problemas";"16:00";"18:00";"Mstr3";"";"56AD";1;"56I"
+"Jueves";"Matemáticas aplicadas a la Ingeniería de la Producción";"Teoría y Problemas";"18:00";"20:00";"Mstr3";"";"56AD";1;"56I"
