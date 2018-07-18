@@ -7,17 +7,17 @@ source('csv2tt.R')
 ## Horas posibles en selector
 horas <- hhSeq(h1 = "08:00", h2 = "21:30", by = "30 min")
 
-asignaturas <- read.csv2('../misc/asignaturas.csv')$Asignatura
-asignaturas <- titlecase(levels(asignaturas))
+asignaturas <- fread('../misc/asignaturas.csv', stringsAsFactors = TRUE)
 
 pdfFolder <- "pdfs"
-tipoFolder <- file.path(pdfFolder, 'tipo')
-asigFolder <- file.path(pdfFolder, 'asignatura')
+tipoFolder <- file.path(pdfFolder, 'grado', 'tipo')
+asigFolder <- file.path(pdfFolder, 'grado', 'asignatura')
+masterFolder <- file.path(pdfFolder, 'master')
 
-webdav <- '/var/www/webdav/horarios/grado'
-webTipo <- file.path(webdav, 'tipo')
-webAsignatura <- file.path(webdav, 'asignatura')
-
+webdav <- '/var/www/webdav/horarios'
+webTipo <- file.path(webdav, 'grado', 'tipo')
+webAsignatura <- file.path(webdav, 'grado', 'asignatura')
+webMaster <- file.path(webdav, 'master')
 
 
 actualizaPDF <- function(ruta, semestre)

@@ -14,6 +14,7 @@ leeHorario <- function(grupo, semestre)
                 stringsAsFactors = TRUE)
     ## Algunos ficheros pueden tener filas mal formadas: las elimino
     hh <- hh[!is.na(Dia)]
+
     hh[, Dia := factor(Dia, levels = dias, ordered = TRUE)]
     hh[, Aula := as.character(Aula)]
     setkey(hh, Dia, HoraInicio)
@@ -145,12 +146,11 @@ csv2tt <- function(hh, nombre, semestre, itinerario = "",
                 hInicio, "}{", hFin, "}{",
                 hourHeight, "}")
     ## Hora tuthora y comidas: en los másteres no hay.
-    if (grupo %in% c('56AA', '56AB', '56AC'))
+    if (grupo %in% masters)
     {
         tuthTex <- ""
-        comida <- ""
-    } else
-    {
+        comidaTex <- ""
+    } else {
         ## Hora tuthora, dependiendo de grupo de mañana o tarde
         tuthora <- ifelse(MoT(grupo) == "M",
                           braces(tuthoraM),
@@ -167,7 +167,6 @@ csv2tt <- function(hh, nombre, semestre, itinerario = "",
         comidaTex <- paste0("\\shortcalentry[free]{", 1:5, "}",
                             comida,
                             "{Comida}{}")
-        
     }
     ## Franjas horarias de docencia
     htex <- hh[, paste0("\\calentry",
