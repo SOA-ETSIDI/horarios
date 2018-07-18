@@ -13,10 +13,17 @@ shinyServer(function(input,output,session){
         semestre <- which(semestres == input$semestre)
         grupo <- input$grupo
         dt <- leeHorario(grupo, semestre)
+        titulacion <- dt$Titulacion[1]
         dt[,
            c("Grupo", "Semestre", "Titulacion") := NULL]
         values$data <- dt
-        file.copy(file.path(tipoFolder,
+
+        values$asignaturas <- levels(factor(asignaturas[Titulacion == titulacion,
+                                                        titlecase(Asignatura)]))
+        destination <- ifelse(grupo %in% masters,
+                              masterFolder,
+                              tipoFolder)
+        file.copy(file.path(destination,
                             paste0('S', semestre), 
                             paste0(grupo, '_', semestre, '.pdf')),
                   tempdir(),
@@ -37,23 +44,23 @@ shinyServer(function(input,output,session){
                         columnSorting = FALSE)
         hot <- hot_col(hot, col = "Tipo",
                        source = tipos,
-                       type = 'autocomplete',
+                       type = 'dropdown',
                        strict = TRUE)
         hot <- hot_col(hot, col = "Dia",
                        source = dias,
-                       type = 'autocomplete',
+                       type = 'dropdown',
                        strict = TRUE)
         hot <- hot_col(hot, col = "Asignatura",
-                       source = asignaturas,
+                       source = values$asignaturas,
                        type = 'autocomplete',
                        strict = TRUE)
         hot <- hot_col(hot, col = "HoraInicio",
                        source = horas,
-                       type = 'autocomplete',
+                       type = 'dropdown',
                        strict = TRUE)
         hot <- hot_col(hot, col = "HoraFinal",
                        source = horas,
-                       type = 'autocomplete',
+                       type = 'dropdown',
                        strict = TRUE)
         hot <- hot_col(hot, col = "Aula",
                        source = c("", aulas, grupos),
@@ -70,7 +77,14 @@ shinyServer(function(input,output,session){
     
     ## Si hay cambios actualizo el data.frame en el reactive values
     observeEvent(input$table,
-                 values$data <- hot_to_r(input$table))
+    {
+        hot = isolate(input$table)
+        if (!is.null(hot))
+        {
+            values$data <- hot_to_r(hot)
+        }
+    })
+        
     
     output$pdfViewer <- renderUI(
     {
@@ -94,7 +108,7 @@ shinyServer(function(input,output,session){
         grupo <- input$grupo
         df$Grupo <- grupo
         ## Genero timetable PDF en directorio temporal
-        if (any(df$Itinerario != ""))
+        if (any(df$Itinerario %in% c('A', 'B')))
             ttItinerario(df, grupo, semestre,
                          colorByTipo = TRUE,
                          dest = tempdir())
@@ -124,30 +138,48 @@ shinyServer(function(input,output,session){
                                    paste0('S', semestre))
         asigSemFolder <- file.path(asigFolder,
                                    paste0('S', semestre))
-        ## Genera PDF con color por tipo
-        if (any(df$Itinerario != ""))
+        masterSemFolder <- file.path(masterFolder,
+                                   paste0('S', semestre))
+
+        if (any(df$Itinerario %in% c('A', 'B')))
+        {## Hay alguna franja con itinerario
+            
+            ## Genera PDF con color por tipo 
             ttItinerario(df, grupo, semestre,
                          colorByTipo = TRUE,
                          dest = tipoSemFolder)
-        else 
-            csv2tt(df, grupo, semestre,
-                   colorByTipo = TRUE,
-                   dest = tipoSemFolder)
-        ## Genera PDF con color por asignatura
-        if (any(df$Itinerario %in% c('A', 'B')))
+            ## Genera PDF con color por asignatura
             ttItinerario(df, grupo, semestre,
                          colorByTipo = FALSE,
                          dest = asigSemFolder)
-        else
-            csv2tt(df, grupo, semestre,
-                   colorByTipo = FALSE,
-                   dest = asigSemFolder)
-        ## Actualizo el fichero completo del semestre
-        for (folder in file.path(pdfFolder, c('tipo', 'asignatura')))
-        {
-            actualizaPDF(folder, semestre)
         }
-
+        else
+        {## Horario sin itinerario
+            if (input$grupo %in% masters)
+                ## Genera PDF para master 
+                csv2tt(df, grupo, semestre,
+                       colorByTipo = TRUE,
+                       dest = masterSemFolder)
+            else
+                {##Horario de grado
+                    ## Genera PDF con color por tipo 
+                    csv2tt(df, grupo, semestre,
+                           colorByTipo = TRUE,
+                           dest = tipoSemFolder)
+                    ## Genera PDF con color por asignatura
+                    csv2tt(df, grupo, semestre,
+                           colorByTipo = FALSE,
+                           dest = asigSemFolder)
+                }
+        }
+        
+        ## Actualizo el fichero completo del semestre si se trata de
+        ## un grado
+        if (input$grupo %in% grupos) 
+            for (folder in file.path(pdfFolder,
+                                     c('tipo', 'asignatura')))
+                actualizaPDF(folder, semestre)
+        ## Si hemos llegado hasta aquí todo ha ido bien
         info('PDFs generados correctamente.')
     })
     ## Publico PDFs en web
@@ -160,22 +192,38 @@ shinyServer(function(input,output,session){
                                    paste0('S', semestre))
         asigSemFolder <- file.path(asigFolder,
                                    paste0('S', semestre))
+        masterSemFolder <- file.path(masterFolder,
+                                   paste0('S', semestre))
         ## Vuelca en webdav
-        okWebTipo <- copyWeb(grupo, semestre, tipoSemFolder, webTipo)
-        okWebAsig <- copyWeb(grupo, semestre, asigSemFolder, webAsignatura)
-        if (okWebTipo & okWebAsig)
+        if (grupo %in% grupos) ## Grados
         {
-            ## Actualizo el fichero completo del semestre
-            for (folder in file.path(webdav, c('tipo', 'asignatura')))
+            okWebTipo <- copyWeb(grupo, semestre,
+                                 tipoSemFolder, webTipo)
+            okWebAsig <- copyWeb(grupo, semestre,
+                                 asigSemFolder, webAsignatura)
+            if (okWebTipo & okWebAsig)
             {
-                actualizaPDF(folder, semestre)
-            }
-            ## Mensaje para usuario si nada falla
-            info('Horarios publicados.')
-            ## Actualizo aulas
-            source('horariosAula.R')
-        } else info('Error al publicar.')
+                ## Actualizo el fichero completo del semestre
+                for (folder in file.path(webdav,
+                                         c('tipo', 'asignatura')))
+                    actualizaPDF(folder, semestre)
+                ## Mensaje para usuario si nada falla
+                info('Horarios publicados.')
+                ## Actualizo aulas
+                source('horariosAula.R')
+            } else info('Error al publicar.')
+        }
+        else ## Master
+        {
+            okWebMaster <- copyWeb(grupo, semestre,
+                                 masterSemFolder, webMaster)
+            if (okWebMaster)
+                ## Mensaje para usuario si nada falla
+                info('Horarios publicados.')
+            else
+                info('Error al publicar.')
+        }
+            
     })
-    
 }) 
 
