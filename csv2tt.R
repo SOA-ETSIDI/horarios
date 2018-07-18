@@ -115,7 +115,7 @@ csv2tt <- function(hh, nombre, semestre, itinerario = "",
     hh[,
        width := findInterval(dh,
                              seq(1, 8, .5),
-                             right = TRUE) * 21
+                             right = TRUE) * 21 * hourHeight
        ]
     ## Según el tipo uso un formato u otro (definidos en timetable.tex)
     if (isTRUE(colorByTipo))
@@ -198,16 +198,23 @@ csv2tt <- function(hh, nombre, semestre, itinerario = "",
     ##    file.remove(c('LogoETSIDI.pdf', 'LogoUPM.pdf'))
 }
 
-ttItinerario <- function(hh, nombre, semestre, colorByTipo = TRUE, dest = tempdir())
+ttItinerario <- function(hh, nombre, semestre,
+                         colorByTipo = TRUE,
+                         hInicio = 8, hFin = 21, hourHeight = 1.1,
+                         dest = tempdir())
 {
     ## Genero un PDF para cada itinerario
     csv2tt(hh[Itinerario %in% c("", "A")],
            nombre, semestre, itinerario = "A",
            colorByTipo = colorByTipo,
+           hInicio = hInicio, hFin = hFin,
+           hourHeight = hourHeight,
            dest = dest)
     csv2tt(hh[Itinerario %in% c("", "B")],
            nombre, semestre, itinerario = "B",
            colorByTipo = colorByTipo,
+           hInicio = hInicio, hFin = hFin,
+           hourHeight = hourHeight,
            dest = dest)
     ## Y los junto en un PDF común
     old <- setwd(dest)

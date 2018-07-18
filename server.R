@@ -107,16 +107,25 @@ shinyServer(function(input,output,session){
         semestre <- which(semestres == input$semestre)
         grupo <- input$grupo
         df$Grupo <- grupo
+        hMin <- minHour(df$HoraInicio)
+        hMax <- maxHour(df$HoraFinal)
+        height <- min(14/(hMax - hMin), 2)
         ## Color por tipo o por asignatura
         colorTipo <- !input$color
         ## Genero timetable PDF en directorio temporal
         if (any(df$Itinerario %in% c('A', 'B')))
             ttItinerario(df, grupo, semestre,
                          colorByTipo = colorTipo,
+                         hInicio = hMin,
+                         hFin = hMax,
+                         hourHeight = height,
                          dest = tempdir())
         else 
             csv2tt(df, grupo, semestre,
                    colorByTipo = colorTipo,
+                   hInicio = hMin,
+                   hFin = hMax,
+                   hourHeight = height,
                    dest = tempdir())
     })
     ## Grabo datos en csv
@@ -124,6 +133,9 @@ shinyServer(function(input,output,session){
     {
         ## Leo tabla
         df <- values$data
+        hMin <- minHour(df$HoraInicio) 
+        hMax <- maxHour(df$HoraFinal)
+        height <- min(14/(hMax - hMin), 2)
         ## Recupero semestre, grupo y titulacion (no incluidos en tabla)
         semestre <- which(semestres == input$semestre)
         grupo <- input$grupo
@@ -152,10 +164,16 @@ shinyServer(function(input,output,session){
             ## Genera PDF con color por tipo 
             ttItinerario(df, grupo, semestre,
                          colorByTipo = TRUE,
+                         hInicio = hMin,
+                         hFin = hMax,
+                         hourHeight = height,
                          dest = tipoSemFolder)
             ## Genera PDF con color por asignatura
             ttItinerario(df, grupo, semestre,
                          colorByTipo = FALSE,
+                         hInicio = hMin,
+                         hFin = hMax,                         
+                         hourHeight = height,
                          dest = asigSemFolder)
         }
         else
@@ -169,6 +187,9 @@ shinyServer(function(input,output,session){
                 ## Genera PDF para master coloreando por asignatura
                 csv2tt(df, titulo, semestre,
                        colorByTipo = FALSE,
+                       hInicio = hMin,
+                       hFin = hMax,                                                
+                       hourHeight = height,
                        dest = masterSemFolder)
             }
             else
@@ -176,10 +197,16 @@ shinyServer(function(input,output,session){
                     ## Genera PDF con color por tipo 
                     csv2tt(df, grupo, semestre,
                            colorByTipo = TRUE,
+                           hInicio = hMin,
+                           hFin = hMax,                                                    
+                           hourHeight = height,
                            dest = tipoSemFolder)
                     ## Genera PDF con color por asignatura
                     csv2tt(df, grupo, semestre,
                            colorByTipo = FALSE,
+                           hInicio = hMin,
+                           hFin = hMax,                         
+                           hourHeight = height,
                            dest = asigSemFolder)
                 }
         }
