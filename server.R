@@ -127,7 +127,10 @@ shinyServer(function(input,output,session){
         ## Recupero semestre, grupo y titulacion (no incluidos en tabla)
         semestre <- which(semestres == input$semestre)
         grupo <- input$grupo
-        titulacion <- whichDegree(grupo)
+        if (grupo %in% masters)
+            titulacion <- grupo
+        else
+            titulacion <- whichDegree(grupo)
         ## Los añado en la tabla como columnas adicionales
         df$Grupo <- grupo
         df$Semestre <- semestre
