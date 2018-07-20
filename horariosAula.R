@@ -4,8 +4,7 @@ source('../misc/funciones.R')
 source('../misc/defs.R')
 semestres <- c("Septiembre-Enero", "Febrero-Junio")
 
-webdavAula <- '/var/www/webdav/aulas/'
-
+webdavAula <- '/tmp'#'/var/www/webdav/aulas/'
 ## Horarios con aulas
 horariosPath <- 'csv/'
 files <- dir(horariosPath, pattern = '.csv$')
@@ -43,37 +42,29 @@ aulasGrado <- c("A10", "A11", "A12", "A13",
                 "B31", "B32",
                 "B41", "B42")
 
-for (aula in aulasGrado)
-{
-    xx <- dth[grepl(aula, Aula)]
-    if (nrow(xx) > 0)
-    {
-     xx[, Aula := Grupo]
-    try(csv2tt(xx,
-               nombre = aula,
-               semestre = semestreActual,
-               colorByTipo = FALSE))   
-    }
-}
-
 aulasMaster <- paste0("Mstr", 1:4)
 
-## Aulas de Máster
-for (aula in aulasMaster)
+aulas <- c(aulasGrado, aulasMaster)
+
+for (aula in aulas)
 {
     xx <- dth[grepl(aula, Aula)]
     if (nrow(xx) > 0)
     {
-     xx[, Aula := Grupo]
-    try(csv2tt(xx,
-               nombre = aula,
-               semestre = semestreActual,
-               colorByTipo = FALSE))   
+        xx[, `:=`(Aula = Grupo,
+                  Grupo = aula)
+           ]
+        try(csv2tt(xx,
+                   nombre = aula,
+                   semestre = semestreActual,
+                   colorByTipo = FALSE))   
     }
 }
 
 old <- setwd(tempdir())
+
 file.remove(c("LogoETSIDI.pdf", "LogoUPM.pdf"))
+
 pdfs <- c(paste0(aulasGrado, '_', semestreActual, '.pdf'),
           paste0(aulasMaster, '_', semestreActual, '.pdf'))
 
