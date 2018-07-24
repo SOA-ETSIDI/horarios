@@ -214,7 +214,7 @@ shinyServer(function(input,output,session){
         ## Actualizo el fichero completo del semestre si se trata de
         ## un grado
         if (input$grupo %in% grupos) 
-            for (folder in file.path(pdfFolder,
+            for (folder in file.path(pdfFolder, 'grado',
                                      c('tipo', 'asignatura')))
                 actualizaPDF(folder, semestre)
         ## Si hemos llegado hasta aquí todo ha ido bien
@@ -242,7 +242,7 @@ shinyServer(function(input,output,session){
             if (okWebTipo & okWebAsig)
             {
                 ## Actualizo el fichero completo del semestre
-                for (folder in file.path(webdav,
+                for (folder in file.path(webdav, 'grado',
                                          c('tipo', 'asignatura')))
                     actualizaPDF(folder, semestre)
                 ## Mensaje para usuario si nada falla
