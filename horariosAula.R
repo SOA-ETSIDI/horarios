@@ -4,7 +4,7 @@ source('../misc/funciones.R')
 source('../misc/defs.R')
 semestres <- c("Septiembre-Enero", "Febrero-Junio")
 
-webdavAula <- '/tmp'#'/var/www/webdav/aulas/'
+webdavAula <- '/var/www/webdav/aulas/'
 ## Horarios con aulas
 horariosPath <- 'csv/'
 files <- dir(horariosPath, pattern = '.csv$')
