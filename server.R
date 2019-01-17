@@ -245,10 +245,10 @@ shinyServer(function(input,output,session){
                 for (folder in file.path(webdav, 'grado',
                                          c('tipo', 'asignatura')))
                     actualizaPDF(folder, semestre)
-                ## Mensaje para usuario si nada falla
-                info('Horarios publicados.')
                 ## Actualizo aulas
-                source('horariosAula.R')
+                aulasPDF(semestre)
+                ## Mensaje para usuario si nada falla
+                info('Horarios y asignación de aulas publicados.')
             } else info('Error al publicar.')
         }
         else ## Master

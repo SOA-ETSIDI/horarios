@@ -4,11 +4,28 @@ source('../misc/funciones.R')
 semestres <- c("Septiembre-Enero", "Febrero-Junio")
 
 source('csv2tt.R')
+
 ## Horas posibles en selector
 horas <- hhSeq(h1 = "08:00", h2 = "21:30", by = "30 min")
 
+## Asignaturas y aulas
 asignaturas <- fread('../misc/asignaturas.csv', stringsAsFactors = TRUE)
 
+aulasGrado <- c("A10", "A11", "A12", "A13",
+                "A21", "A22", "A23", "A24", "A25", "A26", "A27",
+                "A34", "A35",
+                "B11", "B12",
+                "B21", "B22",
+                "B31", "B32",
+                "B41", "B42")
+
+aulasMaster <- paste0("Mstr", 1:4)
+
+aulas <- c(aulasGrado, aulasMaster)
+
+
+## Rutas
+horariosPath <- 'csv/'
 pdfFolder <- "pdfs"
 tipoFolder <- file.path(pdfFolder, 'grado', 'tipo')
 asigFolder <- file.path(pdfFolder, 'grado', 'asignatura')
@@ -19,7 +36,26 @@ webTipo <- file.path(webdav, 'grado', 'tipo')
 webAsignatura <- file.path(webdav, 'grado', 'asignatura')
 webMaster <- file.path(webdav, 'master')
 
+webdavAula <- '/var/www/webdav/aulas/'
 
+## Horarios con aulas
+leeHorarios <- function()
+{
+    files <- dir(horariosPath, pattern = '.csv$')
+    dt <- rbindlist(lapply(paste0(horariosPath, files),
+                                 fread,
+                                 na.string = "", 
+                                 encoding = 'UTF-8'),
+                          fill = TRUE)
+    ## Los másteres no tienen grupo: le asigno el código de la titulacion
+    dt[is.na(Grupo), Grupo := Titulacion]
+    ## Devuelve objeto
+    dt
+}
+
+horarios <- leeHorarios()
+
+## Funciones auxiliares
 actualizaPDF <- function(ruta, semestre)
 {
     pdfs <- file.path(ruta,
@@ -42,4 +78,61 @@ copyWeb <- function(grupo, semestre, from, to)
     file.copy(file.path(from, fichero),
               file.path(toFolder, fichero),
               overwrite = TRUE)
+}
+
+
+aulasPDF <- function(semestre)
+{
+    horarios <- leeHorarios()
+    ## No incluyo la hora de inicio: una actividad queda determinada por
+    ## su nombre, tipo, grupo y dia (y aporta la información de aula)
+    dth <- horarios[Semestre == semestre,
+                    .(
+                        Asignatura,
+                        Tipo,
+                        Grupo,
+                        Dia = factor(Dia, dias),
+                        HoraInicio, HoraFinal,
+                        Aula
+                    )]
+    setkey(dth, Asignatura, Tipo, Grupo, Dia)
+    ## Me quedo con los registros únicos (elimino las duplicidades por diferentes horas de inicio)
+    ##dth <- unique(dth)
+
+    for (aula in aulas)
+    {
+        xx <- dth[grepl(aula, Aula)]
+        if (nrow(xx) > 0)
+        {
+            xx[, `:=`(Aula = Grupo,
+                      Grupo = aula)
+               ]
+            try(csv2tt(xx,
+                       nombre = aula,
+                       semestre = semestre,
+                       colorByTipo = FALSE))   
+        }
+    }
+
+    old <- setwd(tempdir())
+
+    file.remove(c("LogoETSIDI.pdf", "LogoUPM.pdf"))
+
+    pdfs <- c(paste0(aulasGrado, '_', semestre, '.pdf'),
+              paste0(aulasMaster, '_', semestre, '.pdf'))
+
+    files <- dir(pattern = 'pdf')
+
+    pdfs <- pdfs[pdfs %in% files]
+
+    completo <- paste0("Ocupacion_Aulas_", semestre, "S.pdf")
+
+    system2("pdftk", c(paste(pdfs, collapse = " "),
+                       "cat output",
+                       completo)
+            )
+
+    file.copy(c(pdfs, completo), webdavAula, overwrite = TRUE)
+
+    setwd(old)
 }
