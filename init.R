@@ -21,7 +21,9 @@ aulasGrado <- c("A10", "A11", "A12", "A13",
 
 aulasMaster <- paste0("Mstr", 1:4)
 
-aulas <- c(aulasGrado, aulasMaster)
+aulasADI <- c("ADI-1", "ADI-2", "A404")
+
+aulas <- c(aulasGrado, aulasMaster, aulasADI)
 
 
 ## Rutas
