@@ -17,6 +17,8 @@ leeHorario <- function(grupo, semestre)
 
     hh[, Dia := factor(Dia, levels = dias, ordered = TRUE)]
     hh[, Aula := as.character(Aula)]
+    if("Comentarios" %in% names(hh))
+        hh$Comentarios <- as.character(hh$Comentarios)
     setkey(hh, Dia, HoraInicio)
     hh
 }
@@ -100,17 +102,32 @@ csv2tt <- function(hh, nombre, semestre, itinerario = "",
     hh <- as.data.table(hh)
     grupo <- as.character(hh$Grupo[1])
     if (missing(nombre)) nombre <- grupo
+
+    ## Algunos horarios tienen una columna de comentarios
+    hasComments <- "Comentarios" %in% names(hh)
     ## Si dos asignaturas coinciden en horario,
     ## las concatena en un único string
     ## Idem para el tipo, y además abreviamos su descripción
     hh <- hh[,
-             .(
-                 Asignatura = join(Asignatura, collapse = " / "),
-                 Tipo = join(abTipo(Tipo), collapse = "|"),
-                 Aula = join(Aula, collapse = "|"),
-                 HoraFinal,
-                 dh = diffHour(HoraInicio, HoraFinal)),
-             by = .(Dia, HoraInicio)]
+    {if (hasComments)
+         list(
+             Asignatura = join(Asignatura, collapse = " / "),
+             Tipo = join(abTipo(Tipo), collapse = "|"),
+             Aula = join(Aula, collapse = "|"),
+             HoraFinal = HoraFinal,
+             dh = diffHour(HoraInicio, HoraFinal),
+             Comentarios = Comentarios
+         )
+     else
+         list(
+             Asignatura = join(Asignatura, collapse = " / "),
+             Tipo = join(abTipo(Tipo), collapse = "|"),
+             Aula = join(Aula, collapse = "|"),
+             HoraFinal = HoraFinal,
+             dh = diffHour(HoraInicio, HoraFinal)
+         )
+    },
+    by = .(Dia, HoraInicio)]
     ## Recorto el nombre de la asignatura según el espacio disponible
     hh[,
        width := findInterval(dh,
@@ -125,14 +142,30 @@ csv2tt <- function(hh, nombre, semestre, itinerario = "",
            formato := "misc"]
     } else
     {## color definido por asignatura
-        hh <- hh[, .(Tipo,
-                     Dia,
-                     HoraInicio, HoraFinal,
-                     Aula,
-                     width,
-                     formato = LETTERS[.GRP]),
-                 by = Asignatura]
+        hh[,
+           formato := LETTERS[.GRP],
+           by = Asignatura]
     }
+
+    ## La columna de comentarios (si existe) irá como footnote
+    if (hasComments)
+    {
+        hh[is.na(Comentarios),
+           Comentarios := ""]
+        hh[Comentarios != "",
+           Comentarios := paste0("\\footnote{", Comentarios, "}")
+           ]
+        ## Además, acortamos el texto de asignatura para que quepa
+        hh[,
+           Asignatura := paste0(shorten(Asignatura, width),
+                                Comentarios)
+           ]
+    }
+    else
+        hh[,
+           Asignatura := shorten(Asignatura, width)
+           ]
+
     ## Ordena por dia y hora de inicio
     setorder(hh, Dia, HoraInicio)
     ## Cabecera del documento, después del preambulo
@@ -174,7 +207,7 @@ csv2tt <- function(hh, nombre, semestre, itinerario = "",
                         "{", match(Dia, dias), "}",
                         "{", formatHora2(HoraInicio), "}",
                         "{", formatHora2(HoraFinal), "}",
-                        "{", shorten(Asignatura, width), "}",
+                        "{", Asignatura, "}",
                         "{", Tipo, "}",
                         "{", Aula, "}")
                ]
