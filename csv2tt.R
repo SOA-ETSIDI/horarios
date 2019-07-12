@@ -49,7 +49,7 @@ join <- function(x, collapse = ' \\\\ ')
     ## Descarto elementos vacíos
     x <- x[x != ""]
     N <- length(x)
-    if (N > 1) x <- shorten(x, 20)
+##    if (N > 1) x <- shorten(x, 20)
     paste(x, collapse = collapse)
 }
 
@@ -103,37 +103,46 @@ csv2tt <- function(hh, nombre, semestre, itinerario = "",
     grupo <- as.character(hh$Grupo[1])
     if (missing(nombre)) nombre <- grupo
 
+    ## Recorto el nombre de la asignatura según el espacio disponible
+    hh[,
+       N := .N, ## Número de asignaturas que coinciden en una misma franja
+       by = .(Dia, HoraInicio)]
+    
+    hh[,
+       Asignatura :=
+           {
+               dh <- diffHour(HoraInicio, HoraFinal)
+               width <- 1 / N * 21 * hourHeight *
+                   findInterval(dh,
+                                seq(1, 8, .5),
+                                right = TRUE) 
+               shorten(Asignatura, width)
+           }
+       ]
     ## Algunos horarios tienen una columna de comentarios
     hasComments <- "Comentarios" %in% names(hh)
+    ## La columna de comentarios (si existe) irá como footnote
+    if (hasComments)
+    {
+        hh[is.na(Comentarios),
+           Comentarios := ""]
+        hh[Comentarios != "",
+           Asignatura := paste0(Asignatura,
+                                "\\footnote{",
+                                Comentarios, "}")
+           ]
+    }
     ## Si dos asignaturas coinciden en horario,
     ## las concatena en un único string
     ## Idem para el tipo, y además abreviamos su descripción
     hh <- hh[,
-    {if (hasComments)
-         list(
-             Asignatura = join(Asignatura, collapse = " / "),
-             Tipo = join(abTipo(Tipo), collapse = "|"),
-             Aula = join(Aula, collapse = "|"),
-             HoraFinal = HoraFinal,
-             dh = diffHour(HoraInicio, HoraFinal),
-             Comentarios = Comentarios
-         )
-     else
-         list(
-             Asignatura = join(Asignatura, collapse = " / "),
-             Tipo = join(abTipo(Tipo), collapse = "|"),
-             Aula = join(Aula, collapse = "|"),
-             HoraFinal = HoraFinal,
-             dh = diffHour(HoraInicio, HoraFinal)
-         )
-    },
-    by = .(Dia, HoraInicio)]
-    ## Recorto el nombre de la asignatura según el espacio disponible
-    hh[,
-       width := findInterval(dh,
-                             seq(1, 8, .5),
-                             right = TRUE) * 21 * hourHeight
-       ]
+             list(
+                 Asignatura = join(Asignatura, collapse = " / "),
+                 Tipo = join(abTipo(Tipo), collapse = "|"),
+                 Aula = join(Aula, collapse = "|"),
+                 HoraFinal = HoraFinal
+             ),
+             by = .(Dia, HoraInicio)]
     ## Según el tipo uso un formato u otro (definidos en timetable.tex)
     if (isTRUE(colorByTipo))
     {
@@ -146,25 +155,6 @@ csv2tt <- function(hh, nombre, semestre, itinerario = "",
            formato := LETTERS[.GRP],
            by = Asignatura]
     }
-
-    ## La columna de comentarios (si existe) irá como footnote
-    if (hasComments)
-    {
-        hh[is.na(Comentarios),
-           Comentarios := ""]
-        hh[Comentarios != "",
-           Comentarios := paste0("\\footnote{", Comentarios, "}")
-           ]
-        ## Además, acortamos el texto de asignatura para que quepa
-        hh[,
-           Asignatura := paste0(shorten(Asignatura, width),
-                                Comentarios)
-           ]
-    }
-    else
-        hh[,
-           Asignatura := shorten(Asignatura, width)
-           ]
 
     ## Ordena por dia y hora de inicio
     setorder(hh, Dia, HoraInicio)

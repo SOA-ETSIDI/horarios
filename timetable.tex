@@ -35,9 +35,11 @@
 \usepackage{tikz}
 \usepackage{pgfcore}
 \usepackage{pgfcalendar}
-%% Usa simbolos en footnotes (de minipage)
-%% https://tex.stackexchange.com/a/18500
-\renewcommand\thempfootnote{\fnsymbol{mpfootnote}}
+
+% %% Usa números en footnotes de minipage
+% %% https://tex.stackexchange.com/a/18500
+\renewcommand\thempfootnote{\arabic{mpfootnote}}
+
 %% Disable hyphenation
 \usepackage[none]{hyphenat}
 
