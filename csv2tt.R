@@ -14,7 +14,9 @@ leeHorario <- function(grupo, semestre)
                 stringsAsFactors = TRUE)
     ## Algunos ficheros pueden tener filas mal formadas: las elimino
     hh <- hh[!is.na(Dia)]
-
+    if ("Itinerario" %in% names(hh))
+        hh[, Itinerario := factor(Itinerario,
+                                  levels = c("A", "B", ""))]
     hh[, Dia := factor(Dia, levels = dias, ordered = TRUE)]
     hh[, Aula := as.character(Aula)]
     if("Comentarios" %in% names(hh))
