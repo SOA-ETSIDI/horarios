@@ -235,21 +235,31 @@ shinyServer(function(input,output,session){
         ## Vuelca en webdav
         if (grupo %in% grupos) ## Grados
         {
-            okWebTipo <- copyWeb(grupo, semestre,
-                                 tipoSemFolder, webTipo)
-            okWebAsig <- copyWeb(grupo, semestre,
-                                 asigSemFolder, webAsignatura)
-            if (okWebTipo & okWebAsig)
+            withProgress(message = "Publicando horarios...",
             {
-                ## Actualizo el fichero completo del semestre
-                for (folder in file.path(webdav, 'grado',
-                                         c('tipo', 'asignatura')))
-                    actualizaPDF(folder, semestre)
-                ## Actualizo aulas
-                aulasPDF(semestre)
-                ## Mensaje para usuario si nada falla
-                info('Horarios y asignación de aulas publicados.')
-            } else info('Error al publicar.')
+                nSteps <- 5
+                okWebTipo <- copyWeb(grupo, semestre,
+                                     tipoSemFolder, webTipo)
+                incProgress(1/nSteps)
+                okWebAsig <- copyWeb(grupo, semestre,
+                                     asigSemFolder, webAsignatura)
+                incProgress(1/nSteps)
+                if (okWebTipo & okWebAsig)
+                {
+                    ## Actualizo el fichero completo del semestre
+                    for (folder in file.path(webdav, 'grado',
+                                             c('tipo', 'asignatura')))
+                    {
+                        actualizaPDF(folder, semestre)
+                        incProgress(1/nSteps)
+                    }
+                    ## Actualizo aulas
+                    aulasPDF(semestre)
+                    incProgress(1/nSteps)
+                    ## Mensaje para usuario si nada falla
+                    info('Horarios y asignación de aulas publicados.')
+                } else info('Error al publicar.')
+            })
         }
         else ## Master
         {
