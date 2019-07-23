@@ -228,27 +228,52 @@ ttItinerario <- function(hh, nombre, semestre,
                          hInicio = 8, hFin = 21, hourHeight = 1.1,
                          dest = tempdir())
 {
-    ## Genero un PDF para cada itinerario
-    csv2tt(hh[Itinerario %in% c("", "A")],
-           nombre, semestre, itinerario = "A",
-           colorByTipo = colorByTipo,
-           hInicio = hInicio, hFin = hFin,
-           hourHeight = hourHeight,
-           dest = dest)
-    csv2tt(hh[Itinerario %in% c("", "B")],
-           nombre, semestre, itinerario = "B",
-           colorByTipo = colorByTipo,
-           hInicio = hInicio, hFin = hFin,
-           hourHeight = hourHeight,
-           dest = dest)
-    ## Y los junto en un PDF común
-    old <- setwd(dest)
-    pdfs <- paste0(nombre, c("A", "B"), "_", semestre, ".pdf")
-    system2('pdftk', c(pdfs, 
-                       "cat",
-                       "output",
-                       paste0(nombre, "_", semestre, ".pdf")))
-    ## borrando los individuales
-    file.remove(pdfs)
-    setwd(old)
+    ## Número de asignaturas en cada itinerario
+    nA <- hh[Itinerario == "A", .N]
+    nB <- hh[Itinerario == "B", .N]
+    ## Si los dos itinerarios tienen asignaturas, genero un PDF para
+    ## cada itinerario
+    if (nA > 0 & nB > 0)
+    {
+        csv2tt(hh[Itinerario %in% c("", "A")],
+               nombre, semestre, itinerario = "A",
+               colorByTipo = colorByTipo,
+               hInicio = hInicio, hFin = hFin,
+               hourHeight = hourHeight,
+               dest = dest)
+        csv2tt(hh[Itinerario %in% c("", "B")],
+               nombre, semestre, itinerario = "B",
+               colorByTipo = colorByTipo,
+               hInicio = hInicio, hFin = hFin,
+               hourHeight = hourHeight,
+               dest = dest)
+        ## Y los junto en un PDF común
+        old <- setwd(dest)
+        pdfs <- paste0(nombre, c("A", "B"), "_", semestre, ".pdf")
+        system2('pdftk', c(pdfs, 
+                           "cat",
+                           "output",
+                           paste0(nombre, "_", semestre, ".pdf")))
+        ## borrando los individuales
+        file.remove(pdfs)
+        setwd(old)
+    }
+    else if (nA > 0) ## Sólo hay itinerario A
+    {
+        csv2tt(hh[Itinerario %in% c("", "A")],
+               paste0(nombre, "A"), semestre, itinerario = "",
+               colorByTipo = colorByTipo,
+               hInicio = hInicio, hFin = hFin,
+               hourHeight = hourHeight,
+               dest = dest)
+    }
+    else if (nB > 0) ## Sólo hay itinerario B
+    {
+        csv2tt(hh[Itinerario %in% c("", "B")],
+               paste0(nombre, "B"), semestre, itinerario = "",
+               colorByTipo = colorByTipo,
+               hInicio = hInicio, hFin = hFin,
+               hourHeight = hourHeight,
+               dest = dest)
+    }
 }
