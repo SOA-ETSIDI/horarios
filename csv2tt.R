@@ -231,6 +231,11 @@ ttItinerario <- function(hh, nombre, semestre,
     ## Número de asignaturas en cada itinerario
     nA <- hh[Itinerario == "A", .N]
     nB <- hh[Itinerario == "B", .N]
+    ## Asignaturas comunes a los dos itinerarios
+    nCom <- hh[Itinerario == "", .N]
+    ## Por tanto, cada itinerario tiene en su horario sus asignaturas particulares *y* las comunes
+    nA <- nA + nCom
+    nB <- nB + nCom
     ## Si los dos itinerarios tienen asignaturas, genero un PDF para
     ## cada itinerario
     if (nA > 0 & nB > 0)
