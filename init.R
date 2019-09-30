@@ -120,8 +120,7 @@ aulasPDF <- function(semestre)
 
     file.remove(c("LogoETSIDI.pdf", "LogoUPM.pdf"))
 
-    pdfs <- c(paste0(aulasGrado, '_', semestre, '.pdf'),
-              paste0(aulasMaster, '_', semestre, '.pdf'))
+    pdfs <- paste0(aulas, '_', semestre, '.pdf')
 
     files <- dir(pattern = 'pdf')
 
