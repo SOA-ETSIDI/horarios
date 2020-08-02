@@ -5,6 +5,8 @@ semestres <- c("Septiembre-Enero", "Febrero-Junio")
 
 source('csv2tt.R')
 
+cursoActual <- "2020-21" ## Eliminar en merge cuando horarios sean definitivos 
+
 ## Horas posibles en selector
 horas <- hhSeq(h1 = "08:00", h2 = "21:30", by = "30 min")
 
@@ -33,12 +35,12 @@ tipoFolder <- file.path(pdfFolder, 'grado', 'tipo')
 asigFolder <- file.path(pdfFolder, 'grado', 'asignatura')
 masterFolder <- file.path(pdfFolder, 'master')
 
-webdav <- '/var/www/webdav/horarios'
+webdav <- '/var/www/webdav/horarios2021'
 webTipo <- file.path(webdav, 'grado', 'tipo')
 webAsignatura <- file.path(webdav, 'grado', 'asignatura')
 webMaster <- file.path(webdav, 'master')
 
-webdavAula <- '/var/www/webdav/aulas/'
+webdavAula <- '/var/www/webdav/aulas2021/'
 
 ## Horarios con aulas
 leeHorarios <- function()
