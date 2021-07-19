@@ -33,12 +33,12 @@ tipoFolder <- file.path(pdfFolder, 'grado', 'tipo')
 asigFolder <- file.path(pdfFolder, 'grado', 'asignatura')
 masterFolder <- file.path(pdfFolder, 'master')
 
-webdav <- '/var/www/webdav/horarios2122/'
+webdav <- '/var/www/webdav/horarios/'
 webTipo <- file.path(webdav, 'grado', 'tipo')
 webAsignatura <- file.path(webdav, 'grado', 'asignatura')
 webMaster <- file.path(webdav, 'master')
 
-webdavAula <- '/var/www/webdav/aulas2122/'
+webdavAula <- '/var/www/webdav/aulas/'
 
 ## Horarios con aulas
 leeHorarios <- function()
