@@ -5,8 +5,6 @@ semestres <- c("Septiembre-Enero", "Febrero-Junio")
 
 source('csv2tt.R')
 
-cursoActual <- "2021-22" ## Eliminar en merge cuando horarios sean definitivos 
-
 ## Horas posibles en selector
 horas <- hhSeq(h1 = "08:00", h2 = "21:30", by = "30 min")
 
