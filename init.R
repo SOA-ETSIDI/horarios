@@ -12,7 +12,7 @@ horas <- hhSeq(h1 = "08:00", h2 = "21:30", by = "30 min")
 asignaturas <- fread('../misc/asignaturas.csv', stringsAsFactors = TRUE)
 
 aulasGrado <- c("A01", "A02", "A03", "A04",
-                "A05", "A06", "A07", "A08"
+                "A05", "A06", "A07", "A08",
                 "A11", "A12", "A13", "A14", "A15", "A16", "A17",
                 "A21", "A22",
                 "B01", "B02",
@@ -119,8 +119,7 @@ aulasPDF <- function(semestre)
 
     file.remove(c("LogoETSIDI.pdf", "LogoUPM.pdf"))
 
-    pdfs <- c(paste0(aulasGrado, '_', semestre, '.pdf'),
-              paste0(aulasMaster, '_', semestre, '.pdf'))
+    pdfs <- paste0(aulas, '_', semestre, '.pdf')
 
     files <- dir(pattern = 'pdf')
 
