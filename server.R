@@ -219,6 +219,15 @@ shinyServer(function(input,output,session){
                 actualizaPDF(folder, semestre)
         ## Si hemos llegado hasta aquí todo ha ido bien
         info('PDFs generados correctamente.')
+        
+        ## Actualiza repositorio GitHub
+        tryCatch({
+            git("Actualiza horarios y aulas")
+            info("Repositorio actualizado.")
+            },
+            error = function(e)
+                info("Error al actualizar el repositorio."))
+
     })
     ## Publico PDFs en web
     observeEvent(input$publish,

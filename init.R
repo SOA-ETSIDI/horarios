@@ -136,3 +136,17 @@ aulasPDF <- function(semestre)
 
     setwd(old)
 }
+
+git <- function(x)
+{
+    withProgress(message = "Actualizando repositorio ...",{
+    
+        system2("git add .")
+        incProgress(1/5)
+        system2("git",
+                paste("commit -m", x))
+        incProgress(2/5)
+        system2("git", "push")
+        incProgress(1)
+    })
+}
