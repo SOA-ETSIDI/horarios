@@ -39,8 +39,8 @@ editor <- div(id = 'editor',
               fluidRow(
                   column(3,
                          actionButton("update",
-                                      "Confirmar",
-                                      icon = icon("check"))
+                                      "Grabar",
+                                      icon = icon("floppy-disk"))
                          ),
                   column(3,
                          actionButton("publish",
