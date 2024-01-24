@@ -272,15 +272,25 @@ shinyServer(function(input,output,session){
         }
         else ## Master
         {
-            okWebMaster <- copyWeb(grupo, semestre,
-                                 masterSemFolder, webMaster)
-            if (okWebMaster)
-                ## Mensaje para usuario si nada falla
-                info('Horarios publicados.')
-            else
-                info('Error al publicar.')
-        }
+            withProgress(message = "Publicando horarios...",
+            {
+                nSteps <- 2
+                okWebMaster <- copyWeb(grupo, semestre,
+                                       masterSemFolder, webMaster)
+                incProgress(1/nSteps)
+                if (okWebMaster)
+                {
+                    ## Actualizo aulas
+                    aulasPDF(semestre)
+                    incProgress(1/nSteps)
+                    ## Mensaje para usuario si nada falla
+                    info('Horarios y asignación de aulas publicados.')
+                }
+                else
+                    info('Error al publicar.')
+            })
             
+        }
     })
-}) 
+})
 
