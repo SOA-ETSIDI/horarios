@@ -228,27 +228,49 @@ ttItinerario <- function(hh, nombre, semestre,
                          hInicio = 8, hFin = 21, hourHeight = 1.1,
                          dest = tempdir())
 {
-    ## Genero un PDF para cada itinerario
-    csv2tt(hh[Itinerario %in% c("", "A")],
-           nombre, semestre, itinerario = "A",
-           colorByTipo = colorByTipo,
-           hInicio = hInicio, hFin = hFin,
-           hourHeight = hourHeight,
-           dest = dest)
-    csv2tt(hh[Itinerario %in% c("", "B")],
-           nombre, semestre, itinerario = "B",
-           colorByTipo = colorByTipo,
-           hInicio = hInicio, hFin = hFin,
-           hourHeight = hourHeight,
-           dest = dest)
+    hhA <- hh[Itinerario %in% c("", "A")]
+    hhB <- hh[Itinerario %in% c("", "B")]
+    ## Genero un PDF para cada itinerario si no están vacíos
+    if (nrow(hhA) > 0)
+        csv2tt(hhA, 
+               nombre, semestre, itinerario = "A",
+               colorByTipo = colorByTipo,
+               hInicio = hInicio, hFin = hFin,
+               hourHeight = hourHeight,
+               dest = dest)
+    if (nrow(hhB) > 0)
+        csv2tt(hhB, 
+               nombre, semestre, itinerario = "B",
+               colorByTipo = colorByTipo,
+               hInicio = hInicio, hFin = hFin,
+               hourHeight = hourHeight,
+               dest = dest)
     ## Y los junto en un PDF común
-    old <- setwd(dest)
-    pdfs <- paste0(nombre, c("A", "B"), "_", semestre, ".pdf")
-    system2('pdftk', c(pdfs, 
-                       "cat",
-                       "output",
-                       paste0(nombre, "_", semestre, ".pdf")))
-    ## borrando los individuales
-    file.remove(pdfs)
-    setwd(old)
+    if (nrow(hhA) > 0 & nrow(hhB) > 0)
+    {
+        old <- setwd(dest)
+        pdfs <- paste0(nombre, c("A", "B"), "_", semestre, ".pdf")
+        system2('pdftk', c(pdfs, 
+                           "cat",
+                           "output",
+                           paste0(nombre, "_", semestre, ".pdf")))
+        ## borrando los individuales
+        file.remove(pdfs)
+        setwd(old)
+    }
+    else if (nrow(hhA) > 0) ##El itinerario B está vacío
+    {
+        fileA <- file.path(dest,
+                           paste0(nombre, "A", "_", semestre, ".pdf"))
+        output <- file.path(dest,
+                            paste0(nombre, "_", semestre, ".pdf"))
+        file.rename(fileA, output)
+    } else ##El itinerario A está vacío
+    {
+        fileB <- file.path(dest,
+                           paste0(nombre, "B", "_", semestre, ".pdf"))
+        output <- file.path(dest,
+                            paste0(nombre, "_", semestre, ".pdf"))
+        file.rename(fileB, output)
+    }
 }
