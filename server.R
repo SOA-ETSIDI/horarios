@@ -4,6 +4,9 @@ library(shinyjs)
 
 source('init.R')
 
+## Habilito el directorio temporal como fuente de recursos para mostrar en la web
+addResourcePath(prefix = "tmpPDF", directoryPath = tempdir())
+
 shinyServer(function(input,output,session){
     
     values <- reactiveValues()
@@ -93,7 +96,7 @@ shinyServer(function(input,output,session){
         refresh <- input$refresh
         semestre <- which(semestres == input$semestre)
         tags$iframe(style="height:600px; width:100%",
-                    src=paste0("pdfs/",
+                    src=paste0("tmpPDF/",
                                input$grupo,
                                "_", semestre,
                                ".pdf#zoom=page-width")
