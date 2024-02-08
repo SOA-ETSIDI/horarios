@@ -25,7 +25,7 @@ selector <- wellPanel(
     ),
     fluidRow(
         column(12, selectInput('grupo', "Grupo: ",
-                              choices = c(grupos, masters),
+                              choices = c(grupos, masters, otrosMaster, optativasIS), #c(grupos, masters),
                               selected = "M101"))
         )
     )
