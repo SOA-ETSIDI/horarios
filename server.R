@@ -23,7 +23,7 @@ shinyServer(function(input,output,session){
 
         values$asignaturas <- levels(factor(asignaturas[Titulacion == titulacion,
                                                         titlecase(Asignatura)]))
-        destination <- ifelse(grupo %in% masters,
+        destination <- ifelse(grupo %in% c(masters, otrosMaster, optativasIS),
                               masterFolder,
                               tipoFolder)
         file.copy(file.path(destination,
@@ -142,7 +142,7 @@ shinyServer(function(input,output,session){
         ## Recupero semestre, grupo y titulacion (no incluidos en tabla)
         semestre <- which(semestres == input$semestre)
         grupo <- input$grupo
-        if (grupo %in% masters)
+        if (grupo %in% c(masters, otrosMaster, optativasIS))
             titulacion <- grupo
         else
             titulacion <- whichDegree(grupo)
@@ -181,7 +181,7 @@ shinyServer(function(input,output,session){
         }
         else
         {## Horario sin itinerario
-            if (grupo %in% masters)
+            if (grupo %in% c(masters, otrosMaster, optativasIS))
             {
                 ## En master usamos nombre de titulación para
                 ## encabezar el horario

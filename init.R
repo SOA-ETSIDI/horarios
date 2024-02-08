@@ -11,19 +11,6 @@ horas <- hhSeq(h1 = "08:00", h2 = "21:30", by = "30 min")
 ## Asignaturas y aulas
 asignaturas <- fread('../misc/asignaturas.csv', stringsAsFactors = TRUE)
 
-## aulasGrado <- c("A01", "A02", "A03", "A04",
-##                 "A05", "A06", "A07", "A08",
-##                 "A11", "A12", "A13", "A14", "A15", "A16", "A17",
-##                 "A21", "A22",
-##                 "B01", "B02",
-##                 "B11", "B12",
-##                 "B21", "B22",
-##                 "B31", "B32")
-
-## aulasADI <- c("ADI-1", "ADI-2", "ADI-pi")
-
-## aulas <- c(aulasGrado, aulasADI)
-
 
 ## Rutas
 horariosPath <- 'csv/'
