@@ -18,11 +18,13 @@ pdfFolder <- "pdfs"
 tipoFolder <- file.path(pdfFolder, 'grado', 'tipo')
 asigFolder <- file.path(pdfFolder, 'grado', 'asignatura')
 masterFolder <- file.path(pdfFolder, 'master')
+ISFolder <- file.path(pdfFolder, 'IS')
 
 webdav <- '/var/www/webdav/horarios'
 webTipo <- file.path(webdav, 'grado', 'tipo')
 webAsignatura <- file.path(webdav, 'grado', 'asignatura')
 webMaster <- file.path(webdav, 'master')
+webIS <- file.path(webdav, 'IS')
 
 webdavAula <- '/var/www/webdav/aulas/'
 

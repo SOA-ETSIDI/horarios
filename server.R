@@ -23,9 +23,13 @@ shinyServer(function(input,output,session){
 
         values$asignaturas <- levels(factor(asignaturas[Titulacion == titulacion,
                                                         titlecase(Asignatura)]))
-        destination <- ifelse(grupo %in% c(masters, otrosMaster, optativasIS),
-                              masterFolder,
-                              tipoFolder)
+        if (grupo %in% c(masters, otrosMaster))
+            destination <- masterFolder
+        else if (grupo == optativasIS)
+            destination <-  ISFolder
+        else
+            destination <- tipoFolder
+
         file.copy(file.path(destination,
                             paste0('S', semestre), 
                             paste0(grupo, '_', semestre, '.pdf')),
@@ -160,6 +164,8 @@ shinyServer(function(input,output,session){
                                    paste0('S', semestre))
         masterSemFolder <- file.path(masterFolder,
                                    paste0('S', semestre))
+        ISSemFolder <- file.path(ISFolder,
+                                   paste0('S', semestre))
 
         if (any(df$Itinerario %in% c('A', 'B')))
         {## Hay alguna franja con itinerario
@@ -183,17 +189,24 @@ shinyServer(function(input,output,session){
         {## Horario sin itinerario
             if (grupo %in% c(masters, otrosMaster, optativasIS))
             {
-                ## En master usamos nombre de titulación para
+                ## En master e IS usamos nombre de titulación para
                 ## encabezar el horario
-                idx <- match(grupo, masters)
-                titulo <- names(masters)[idx]
-                ## Genera PDF para master coloreando por asignatura
+                vals <- c(masters, otrosMaster, optativasIS)
+                idx <- match(grupo, vals)
+                titulo <- names(vals)[idx]
+                if (grupo == "IS")
+                    SemFolder <- ISSemFolder
+                else
+                    SemFolder <- masterSemFolder
+                
+                ## Genera PDF para master o IS coloreando por
+                ## asignatura
                 csv2tt(df, titulo, semestre,
                        colorByTipo = FALSE,
                        hInicio = hMin,
                        hFin = hMax,                                                
                        hourHeight = height,
-                       dest = masterSemFolder)
+                       dest = SemFolder)
             }
             else
                 {##Horario de grado
@@ -244,6 +257,8 @@ shinyServer(function(input,output,session){
                                    paste0('S', semestre))
         masterSemFolder <- file.path(masterFolder,
                                    paste0('S', semestre))
+        ISSemFolder <- file.path(ISFolder,
+                                   paste0('S', semestre))
         ## Vuelca en webdav
         if (grupo %in% grupos) ## Grados
         {
@@ -273,13 +288,18 @@ shinyServer(function(input,output,session){
                 } else info('Error al publicar.')
             })
         }
-        else ## Master
+        else ## Master o IS
         {
             withProgress(message = "Publicando horarios...",
             {
                 nSteps <- 2
-                okWebMaster <- copyWeb(grupo, semestre,
-                                       masterSemFolder, webMaster)
+                if (grupo == "IS")
+                    
+                    okWeb <- copyWeb(grupo, semestre,
+                                       ISSemFolder, webIS)
+                else
+                    okWeb <- copyWeb(grupo, semestre,
+                                     masterSemFolder, webMaster)
                 incProgress(1/nSteps)
                 if (okWebMaster)
                 {
