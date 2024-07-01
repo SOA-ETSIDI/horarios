@@ -62,6 +62,7 @@ shorten <- function(x, width)
     {
         long <- c("Ingeniería", "Ingenieriles",
                   "Técnicas", "Operaciones",
+                  "Básicas", "Básicos",
                   "Aplicaciones", "Aplicados", "Aplicadas", "Aplicado", "Aplicada",
                   "Propiedades", "Conocimiento",
                   "Transformación",
@@ -71,6 +72,7 @@ shorten <- function(x, width)
                   "Industriales", "Industrial")
         longTo <- c("Ing.", "Ing.",
                     "Téc.", "Op.",
+                    "Bás.", "Bás",
                     "Apl.", "Apl.", "Apl.", "Apl.", "Apl.",
                     "Prop.", "Con.",
                     "Trans.",
