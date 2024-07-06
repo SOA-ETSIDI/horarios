@@ -116,7 +116,7 @@ shinyServer(function(input,output,session){
         df$Grupo <- grupo
         hMin <- minHour(df$HoraInicio)
         hMax <- maxHour(df$HoraFinal)
-        height <- min(14/(hMax - hMin), 2)
+        height <- min(14/(hMax - hMin), 1.5)
         ## Color por tipo o por asignatura
         colorTipo <- !input$color
         ## Genero timetable PDF en directorio temporal
@@ -142,7 +142,7 @@ shinyServer(function(input,output,session){
         df <- values$data
         hMin <- minHour(df$HoraInicio) 
         hMax <- maxHour(df$HoraFinal)
-        height <- min(14/(hMax - hMin), 2)
+        height <- min(14/(hMax - hMin), 1.5)
         ## Recupero semestre, grupo y titulacion (no incluidos en tabla)
         semestre <- which(semestres == input$semestre)
         grupo <- input$grupo
