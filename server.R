@@ -35,23 +35,23 @@ shinyServer(function(input,output,session){
         if (titulacion %in% c(masters, otrosMaster))
         {
             destination <- masterFolder
-            nombre <- titulacion
+            values$nombre <- titulacion
         }
         
         else if (titulacion == optativasIS)
         {
             destination <-  ISFolder
-            nombre <- titulacion
+            values$nombre <- titulacion
         }
         else ## Grado
         {
             destination <- tipoFolder
-            nombre <- grupo
+            values$nombre <- grupo
         }
 
         file.copy(file.path(destination,
                             paste0('S', semestre), 
-                            paste0(nombre, '_', semestre, '.pdf')),
+                            paste0(values$nombre, '_', semestre, '.pdf')),
                   tempdir(),
                   overwrite = TRUE)
     })
@@ -264,6 +264,9 @@ shinyServer(function(input,output,session){
     {
         semestre <- values$semestre
         grupo <- values$grupo
+        titulacion <- values$titulacion
+        nombre <- values$nombre
+        
         ## Rutas de ficheros PDFs
         tipoSemFolder <- file.path(tipoFolder,
                                    paste0('S', semestre))
@@ -274,7 +277,7 @@ shinyServer(function(input,output,session){
         ISSemFolder <- file.path(ISFolder,
                                    paste0('S', semestre))
         ## Vuelca en webdav
-        if (grupo %in% grupos) ## Grados
+        if (titulacion %in% grados) ## Grados
         {
             withProgress(message = "Publicando horarios...",
             {
@@ -309,10 +312,10 @@ shinyServer(function(input,output,session){
                 nSteps <- 2
                 if (titulacion == "IS")
                     
-                    okWeb <- copyWeb(nombre, semestre,
+                    okWebMaster <- copyWeb(nombre, semestre,
                                        ISSemFolder, webIS)
                 else
-                    okWeb <- copyWeb(nombre, semestre,
+                    okWebMaster <- copyWeb(nombre, semestre,
                                      masterSemFolder, webMaster)
                 incProgress(1/nSteps)
                 if (okWebMaster)

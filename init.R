@@ -20,14 +20,12 @@ asigFolder <- file.path(pdfFolder, 'grado', 'asignatura')
 masterFolder <- file.path(pdfFolder, 'master')
 ISFolder <- file.path(pdfFolder, 'IS')
 webdav <- '/var/www/webdav/horarios'
-webdav <- '/tmp/horarios'
 
 webTipo <- file.path(webdav, 'grado', 'tipo')
 webAsignatura <- file.path(webdav, 'grado', 'asignatura')
 webMaster <- file.path(webdav, 'master')
 webIS <- file.path(webdav, 'IS')
 webdavAula <- '/var/www/webdav/aulas/'
-webdavAula <- '/tmp/aulas/'
 
 ## Horarios con aulas
 leeHorarios <- function()
@@ -100,7 +98,6 @@ aulasPDF <- function(semestre)
                ]
             try(csv2tt(xx,
                        nombre = aula,
-                       semestre = semestre,
                        colorByTipo = FALSE))   
         }
     }
