@@ -17,10 +17,13 @@ shinyServer(function(input,output,session){
         grupo <- input$grupo
         dt <- leeHorario(grupo, semestre)
         titulacion <- dt$Titulacion[1]
+        ## Elimino estos campos para que no se puedan modificar en la tabla
         dt[,
            c("Grupo", "Semestre", "Titulacion") := NULL]
         values$data <- dt
-
+        ## Grupo y semestre puedo recuperarlos de input$grupo e
+        ## input$semestre, pero titulacion no, así que lo guardo
+        values$titulacion <- titulacion
         values$asignaturas <- levels(factor(asignaturas[Titulacion == titulacion,
                                                         titlecase(Asignatura)]))
         if (grupo %in% c(masters, otrosMaster))
@@ -109,11 +112,14 @@ shinyServer(function(input,output,session){
     ## Refresco PDF
     observeEvent(input$refresh,
     {
-        ## Leo tabla, y grupo y semestre (no incluidos en tabla)
+        ## Leo tabla...
         df <- values$data
+        ## y añado grupo, semestre y titulación (previamente eliminados de la tabla)
         semestre <- which(semestres == input$semestre)
+        df$Semestre <- semestre
         grupo <- input$grupo
         df$Grupo <- grupo
+        df$Titulacion <- values$titulacion
         hMin <- minHour(df$HoraInicio)
         hMax <- maxHour(df$HoraFinal)
         height <- min(14/(hMax - hMin), 1.5)
@@ -146,10 +152,7 @@ shinyServer(function(input,output,session){
         ## Recupero semestre, grupo y titulacion (no incluidos en tabla)
         semestre <- which(semestres == input$semestre)
         grupo <- input$grupo
-        if (grupo %in% c(masters, otrosMaster, optativasIS))
-            titulacion <- grupo
-        else
-            titulacion <- whichDegree(grupo)
+        titulacion <- values$titulacion
         ## Los añado en la tabla como columnas adicionales
         df$Grupo <- grupo
         df$Semestre <- semestre
