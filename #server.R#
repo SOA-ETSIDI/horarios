@@ -174,7 +174,6 @@ shinyServer(function(input,output,session){
         df$Semestre <- semestre
         df$Titulacion <- titulacion
         ## Graba la tabla csv
-        info(nombre)
         escribeHorario(df, nombre, semestre)
         info('Tabla modificada correctamente.')
         ## Rutas de ficheros PDFs
