@@ -17,25 +17,41 @@ shinyServer(function(input,output,session){
         grupo <- input$grupo
         dt <- leeHorario(grupo, semestre)
         titulacion <- dt$Titulacion[1]
+        grupo <- dt$Grupo[1]
+        semestre <- dt$Semestre[1]
         ## Elimino estos campos para que no se puedan modificar en la tabla
         dt[,
            c("Grupo", "Semestre", "Titulacion") := NULL]
         values$data <- dt
-        ## Grupo y semestre puedo recuperarlos de input$grupo e
-        ## input$semestre, pero titulacion no, así que lo guardo
+        ## Y los guardo en values para recuperarlos después
         values$titulacion <- titulacion
+        values$grupo <- grupo
+        values$semestre <- semestre
         values$asignaturas <- levels(factor(asignaturas[Titulacion == titulacion,
                                                         titlecase(Asignatura)]))
-        if (grupo %in% c(masters, otrosMaster))
+        ## Ajustamos destino. Además, en master e IS usamos nombre de
+        ## titulación para nombrar los ficheros
+
+        if (titulacion %in% c(masters, otrosMaster))
+        {
             destination <- masterFolder
-        else if (grupo == optativasIS)
+            nombre <- titulacion
+        }
+        
+        else if (titulacion == optativasIS)
+        {
             destination <-  ISFolder
-        else
+            nombre <- titulacion
+        }
+        else ## Grado
+        {
             destination <- tipoFolder
+            nombre <- grupo
+        }
 
         file.copy(file.path(destination,
                             paste0('S', semestre), 
-                            paste0(grupo, '_', semestre, '.pdf')),
+                            paste0(nombre, '_', semestre, '.pdf')),
                   tempdir(),
                   overwrite = TRUE)
     })
@@ -101,10 +117,10 @@ shinyServer(function(input,output,session){
         ## Añado enlace reactivo para que actualice contenido del
         ## iframe si aprieto botón "refresh"
         refresh <- input$refresh
-        semestre <- which(semestres == input$semestre)
+        semestre <- values$semestre
         tags$iframe(style="height:600px; width:100%",
                     src=paste0("tmpPDF/",
-                               input$grupo,
+                               values$nombre,
                                "_", semestre,
                                ".pdf#zoom=page-width")
                     )
@@ -115,9 +131,8 @@ shinyServer(function(input,output,session){
         ## Leo tabla...
         df <- values$data
         ## y añado grupo, semestre y titulación (previamente eliminados de la tabla)
-        semestre <- which(semestres == input$semestre)
-        df$Semestre <- semestre
-        grupo <- input$grupo
+        df$Semestre <- values$semestre
+        grupo <- values$grupo
         df$Grupo <- grupo
         df$Titulacion <- values$titulacion
         hMin <- minHour(df$HoraInicio)
@@ -127,14 +142,14 @@ shinyServer(function(input,output,session){
         colorTipo <- !input$color
         ## Genero timetable PDF en directorio temporal
         if (any(df$Itinerario %in% c('A', 'B')))
-            ttItinerario(df, grupo, 
+            ttItinerario(df, values$nombre, 
                          colorByTipo = colorTipo,
                          hInicio = hMin,
                          hFin = hMax,
                          hourHeight = height,
                          dest = tempdir())
         else 
-            csv2tt(df, grupo, 
+            csv2tt(df, values$nombre, 
                    colorByTipo = colorTipo,
                    hInicio = hMin,
                    hFin = hMax,
@@ -150,15 +165,16 @@ shinyServer(function(input,output,session){
         hMax <- maxHour(df$HoraFinal)
         height <- min(14/(hMax - hMin), 1.5)
         ## Recupero semestre, grupo y titulacion (no incluidos en tabla)
-        semestre <- which(semestres == input$semestre)
-        grupo <- input$grupo
+        semestre <- values$semestre
+        grupo <- values$grupo
         titulacion <- values$titulacion
+        nombre <- values$nombre
         ## Los añado en la tabla como columnas adicionales
         df$Grupo <- grupo
         df$Semestre <- semestre
         df$Titulacion <- titulacion
         ## Graba la tabla csv
-        escribeHorario(df, grupo, semestre)
+        escribeHorario(df, nombre, semestre)
         info('Tabla modificada correctamente.')
         ## Rutas de ficheros PDFs
         tipoSemFolder <- file.path(tipoFolder,
@@ -174,14 +190,14 @@ shinyServer(function(input,output,session){
         {## Hay alguna franja con itinerario
             
             ## Genera PDF con color por tipo 
-            ttItinerario(df, grupo, 
+            ttItinerario(df, nombre, 
                          colorByTipo = TRUE,
                          hInicio = hMin,
                          hFin = hMax,
                          hourHeight = height,
                          dest = tipoSemFolder)
             ## Genera PDF con color por asignatura
-            ttItinerario(df, grupo, 
+            ttItinerario(df, nombre, 
                          colorByTipo = FALSE,
                          hInicio = hMin,
                          hFin = hMax,                         
@@ -190,13 +206,8 @@ shinyServer(function(input,output,session){
         }
         else
         {## Horario sin itinerario
-            if (grupo %in% c(masters, otrosMaster, optativasIS))
+            if (titulacion %in% c(masters, otrosMaster, optativasIS))
             {
-                ## En master e IS usamos nombre de titulación para
-                ## encabezar el horario
-                vals <- c(masters, otrosMaster, optativasIS)
-                idx <- match(grupo, vals)
-                titulo <- names(vals)[idx]
                 if (grupo == "IS")
                     SemFolder <- ISSemFolder
                 else
@@ -204,7 +215,7 @@ shinyServer(function(input,output,session){
                 
                 ## Genera PDF para master o IS coloreando por
                 ## asignatura
-                csv2tt(df, titulo,
+                csv2tt(df, nombre,
                        colorByTipo = FALSE,
                        hInicio = hMin,
                        hFin = hMax,                                                
@@ -214,14 +225,14 @@ shinyServer(function(input,output,session){
             else
                 {##Horario de grado
                     ## Genera PDF con color por tipo 
-                    csv2tt(df, grupo, 
+                    csv2tt(df, nombre, 
                            colorByTipo = TRUE,
                            hInicio = hMin,
                            hFin = hMax,                                                    
                            hourHeight = height,
                            dest = tipoSemFolder)
                     ## Genera PDF con color por asignatura
-                    csv2tt(df, grupo, 
+                    csv2tt(df, nombre, 
                            colorByTipo = FALSE,
                            hInicio = hMin,
                            hFin = hMax,                         
@@ -232,7 +243,7 @@ shinyServer(function(input,output,session){
         
         ## Actualizo el fichero completo del semestre si se trata de
         ## un grado
-        if (input$grupo %in% grupos) 
+        if (values$grupo %in% grupos) 
             for (folder in file.path(pdfFolder, 'grado',
                                      c('tipo', 'asignatura')))
                 actualizaPDF(folder, semestre)
@@ -251,8 +262,8 @@ shinyServer(function(input,output,session){
     ## Publico PDFs en web
     observeEvent(input$publish,
     {
-        semestre <- which(semestres == input$semestre)
-        grupo <- input$grupo
+        semestre <- values$semestre
+        grupo <- values$grupo
         ## Rutas de ficheros PDFs
         tipoSemFolder <- file.path(tipoFolder,
                                    paste0('S', semestre))
@@ -296,12 +307,12 @@ shinyServer(function(input,output,session){
             withProgress(message = "Publicando horarios...",
             {
                 nSteps <- 2
-                if (grupo == "IS")
+                if (titulacion == "IS")
                     
-                    okWeb <- copyWeb(grupo, semestre,
+                    okWeb <- copyWeb(nombre, semestre,
                                        ISSemFolder, webIS)
                 else
-                    okWeb <- copyWeb(grupo, semestre,
+                    okWeb <- copyWeb(nombre, semestre,
                                      masterSemFolder, webMaster)
                 incProgress(1/nSteps)
                 if (okWebMaster)
