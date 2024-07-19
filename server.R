@@ -121,14 +121,14 @@ shinyServer(function(input,output,session){
         colorTipo <- !input$color
         ## Genero timetable PDF en directorio temporal
         if (any(df$Itinerario %in% c('A', 'B')))
-            ttItinerario(df, grupo, semestre,
+            ttItinerario(df, grupo, 
                          colorByTipo = colorTipo,
                          hInicio = hMin,
                          hFin = hMax,
                          hourHeight = height,
                          dest = tempdir())
         else 
-            csv2tt(df, grupo, semestre,
+            csv2tt(df, grupo, 
                    colorByTipo = colorTipo,
                    hInicio = hMin,
                    hFin = hMax,
@@ -171,14 +171,14 @@ shinyServer(function(input,output,session){
         {## Hay alguna franja con itinerario
             
             ## Genera PDF con color por tipo 
-            ttItinerario(df, grupo, semestre,
+            ttItinerario(df, grupo, 
                          colorByTipo = TRUE,
                          hInicio = hMin,
                          hFin = hMax,
                          hourHeight = height,
                          dest = tipoSemFolder)
             ## Genera PDF con color por asignatura
-            ttItinerario(df, grupo, semestre,
+            ttItinerario(df, grupo, 
                          colorByTipo = FALSE,
                          hInicio = hMin,
                          hFin = hMax,                         
@@ -201,7 +201,7 @@ shinyServer(function(input,output,session){
                 
                 ## Genera PDF para master o IS coloreando por
                 ## asignatura
-                csv2tt(df, titulo, semestre,
+                csv2tt(df, titulo,
                        colorByTipo = FALSE,
                        hInicio = hMin,
                        hFin = hMax,                                                
@@ -211,14 +211,14 @@ shinyServer(function(input,output,session){
             else
                 {##Horario de grado
                     ## Genera PDF con color por tipo 
-                    csv2tt(df, grupo, semestre,
+                    csv2tt(df, grupo, 
                            colorByTipo = TRUE,
                            hInicio = hMin,
                            hFin = hMax,                                                    
                            hourHeight = height,
                            dest = tipoSemFolder)
                     ## Genera PDF con color por asignatura
-                    csv2tt(df, grupo, semestre,
+                    csv2tt(df, grupo, 
                            colorByTipo = FALSE,
                            hInicio = hMin,
                            hFin = hMax,                         

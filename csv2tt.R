@@ -96,7 +96,7 @@ shorten <- function(x, width)
 template <- readLines("timetable.tex")
 ## hh es un data.table con el contenido de un horario de grupo,
 ## normalmente a través de leeHorario
-csv2tt <- function(hh, nombre, semestre, itinerario = "",
+csv2tt <- function(hh, nombre, itinerario = "",
                    colorByTipo = TRUE,
                    dest = tempdir(),
                    preamble = template,
@@ -105,6 +105,11 @@ csv2tt <- function(hh, nombre, semestre, itinerario = "",
 {
     hh <- as.data.table(hh)
     grupo <- as.character(hh$Grupo[1])
+    titulacion <- as.character(hh$Titulacion[1])
+    nameTitulacion <- names(which(titulaciones == titulacion))
+    semestre <- hh$Semestre[1]
+    
+    ## "nombre" se emplea para nombrar el fichero resultante
     if (missing(nombre)) nombre <- grupo
 
     ## Recorto el nombre de la asignatura según el espacio disponible
@@ -165,15 +170,19 @@ csv2tt <- function(hh, nombre, semestre, itinerario = "",
     ## Cabecera del documento, después del preambulo
     header <- c("\\begin{document}",
                 "\\begin{center}",
+                "\\vspace*{-25mm}",
                 paste0("\\section*{",
-                       paste(nombre, itinerario),
+                       paste(grupo, itinerario),
                        " (", semString[semestre],
                        ")", "}"),
+                paste0("\\subsection*{",
+                       nameTitulacion,
+                       "}"),
                 "\\begin{timetable}{",
                 hInicio, "}{", hFin, "}{",
                 hourHeight, "}")
     ## Hora tuthora y comidas: en los másteres no hay.
-    if (grupo %in% masters)
+    if (titulacion %in% masters)
     {
         tuthTex <- ""
         comidaTex <- ""
@@ -215,7 +224,7 @@ csv2tt <- function(hh, nombre, semestre, itinerario = "",
               dest)
     old <- setwd(dest)
     on.exit(setwd(old))
-    texFile <- paste0(grupo, itinerario, "_", semestre, ".tex")
+    texFile <- paste0(nombre, itinerario, "_", semestre, ".tex")
     ##texFile <- make.names(texFile)
     writeLines(c(preamble, header, tuthTex, comidaTex, htex, ending),
                con = texFile)
@@ -225,7 +234,7 @@ csv2tt <- function(hh, nombre, semestre, itinerario = "",
     ##    file.remove(c('LogoETSIDI.pdf', 'LogoUPM.pdf'))
 }
 
-ttItinerario <- function(hh, nombre, semestre,
+ttItinerario <- function(hh, nombre, 
                          colorByTipo = TRUE,
                          hInicio = 8, hFin = 21, hourHeight = 1.1,
                          dest = tempdir())
@@ -235,14 +244,14 @@ ttItinerario <- function(hh, nombre, semestre,
     ## Genero un PDF para cada itinerario si no están vacíos
     if (nrow(hhA) > 0)
         csv2tt(hhA, 
-               nombre, semestre, itinerario = "A",
+               nombre, itinerario = "A",
                colorByTipo = colorByTipo,
                hInicio = hInicio, hFin = hFin,
                hourHeight = hourHeight,
                dest = dest)
     if (nrow(hhB) > 0)
         csv2tt(hhB, 
-               nombre, semestre, itinerario = "B",
+               nombre, itinerario = "B",
                colorByTipo = colorByTipo,
                hInicio = hInicio, hFin = hFin,
                hourHeight = hourHeight,
