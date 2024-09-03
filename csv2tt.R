@@ -106,7 +106,11 @@ csv2tt <- function(hh, nombre, itinerario = "",
     hh <- as.data.table(hh)
     grupo <- as.character(hh$Grupo[1])
     titulacion <- as.character(hh$Titulacion[1])
-    nameTitulacion <- names(which(titulaciones == titulacion))
+    if (titulacion == "") ## los ficheros de aulas no tienen titulacion
+        nameTitulacion <- ""
+    else
+        nameTitulacion <- names(which(titulaciones == titulacion))
+    
     semestre <- hh$Semestre[1]
     
     ## "nombre" se emplea para nombrar el fichero resultante
@@ -182,7 +186,7 @@ csv2tt <- function(hh, nombre, itinerario = "",
                 hInicio, "}{", hFin, "}{",
                 hourHeight, "}")
     ## Hora tuthora y comidas: en los másteres no hay.
-    if (titulacion %in% masters)
+    if (titulacion %in% masters || titulacion == "")
     {
         tuthTex <- ""
         comidaTex <- ""

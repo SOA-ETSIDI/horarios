@@ -94,7 +94,9 @@ aulasPDF <- function(semestre)
         if (nrow(xx) > 0)
         {
             xx[, `:=`(Aula = Grupo,
-                      Grupo = aula)
+                      Grupo = aula,
+                      Semestre = semestre,
+                      Titulacion = "")
                ]
             try(csv2tt(xx,
                        nombre = aula,
