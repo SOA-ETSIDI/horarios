@@ -36,8 +36,6 @@ leeHorarios <- function()
                                  na.string = "", 
                                  encoding = 'UTF-8'),
                           fill = TRUE)
-    ## Los másteres no tienen grupo: le asigno el código de la titulacion
-    dt[is.na(Grupo), Grupo := Titulacion]
     ## Devuelve objeto
     dt
 }
