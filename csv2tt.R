@@ -245,6 +245,8 @@ ttItinerario <- function(hh, nombre,
 {
     hhA <- hh[Itinerario %in% c("", "A")]
     hhB <- hh[Itinerario %in% c("", "B")]
+
+    semestre <- hh$Semestre[1]
     ## Genero un PDF para cada itinerario si no están vacíos
     if (nrow(hhA) > 0)
         csv2tt(hhA, 
